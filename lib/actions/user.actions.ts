@@ -23,6 +23,7 @@ interface UserUpdateParams {
   image: string;
   email:string;
   path: string;
+  is_setup?:false;
 }
 
 export async function updateUser({
@@ -32,6 +33,7 @@ export async function updateUser({
   path,
   username,
   image,
+  is_setup,
 }: UserUpdateParams): Promise<void> {
   try {
    const connectionString = process.env.DATABASE_URL
@@ -48,7 +50,7 @@ export async function updateUser({
         email:email,
         bio: bio,
         image: image,
-        onboarded: true,
+        is_setup: is_setup,
       })
       .onConflictDoUpdate({
         target: users.id,
@@ -57,7 +59,7 @@ export async function updateUser({
           bio: bio,
           email:email,
           image: image,
-          onboarded: true,
+          is_setup: is_setup,
         },
         where: eq(users.id, userId),
       })

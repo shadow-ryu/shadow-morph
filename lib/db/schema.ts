@@ -6,7 +6,7 @@ export const users = pgTable('users', {
   email: varchar('email', { length: 256 }),
   username: varchar('username', { length: 256 }),
   image: text('image'),
-  onboarded: boolean('onboarded').default(false),
+  is_setup: boolean('onboarded').default(false),
   bio: text('bio'),
   interests: json('json').$type<string[]>(),
   createdAt: timestamp('createdAt', { mode: 'string' }).defaultNow(),
