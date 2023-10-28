@@ -1,11 +1,14 @@
+"use client"
 import { currentUser } from "@clerk/nextjs";
+import { headers } from "next/headers";
+import { usePathname, useRouter } from "next/navigation";
 
 // import UserCard from "../cards/UserCard";
 
 // import { fetchCommunities } from "@/lib/actions/community.actions";
 // import { fetchUsers } from "@/lib/actions/user.actions";
 
-async function RightSidebar() {
+function RightSidebar() {
 //   const user = await currentUser();
 //   if (!user) return null;
 
@@ -15,9 +18,14 @@ async function RightSidebar() {
 //   });
 
 //   const suggestedCOmmunities = await fetchCommunities({ pageSize: 4 });
-
+const router = useRouter();
+const pathname = usePathname();
+console.log(pathname);
+if(['/post/create'].includes(pathname) ){
+  return null
+}
   return (
-    <section className='custom-scrollbar rightsidebar'>
+ <section className='custom-scrollbar rightsidebar'>
       <div className='flex flex-1 flex-col justify-start'>
         <h3 className='text-heading4-medium text-light-1'>
           Suggested Communities
