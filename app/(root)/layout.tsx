@@ -2,10 +2,7 @@ import BottomNav from "@/components/custom-ui/common/BottomNav";
 import LeftSidebar from "@/components/custom-ui/common/LSideBar";
 import Navbar from "@/components/custom-ui/common/Navbar";
 import RightSidebar from "@/components/custom-ui/common/RSidebar";
-import Providers from "@/components/custom-ui/Provider";
-import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/nextjs";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
@@ -22,29 +19,24 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const queryClient = new QueryClient();
   return (
+    <ClerkProvider>
+      <html lang="en">
+        <body className={inter.className} suppressHydrationWarning={true}>
+          <Navbar />
 
-      <ClerkProvider>
-         <Providers>
-        <html lang="en">
-          <body className={inter.className} suppressHydrationWarning={true}>
-            <Navbar />
+          <main className="flex flex-row">
+            <LeftSidebar/>
+            <section className="main-container">
+              <div className="w-full max-w-4xl">{children}</div>
+            </section>
+            {/* @ts-ignore */}
+            <RightSidebar />
+          </main>
 
-            <main className="flex flex-row">
-              <LeftSidebar />
-              <section className="main-container">
-                <div className="w-full max-w-5xl">{children}</div>
-              </section>
-              {/* @ts-ignore */}
-              <RightSidebar />
-            </main>
-
-            <BottomNav />
-          <Toaster />
-          </body>
-        </html>
-       </Providers>
-      </ClerkProvider>
+          <BottomNav/>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

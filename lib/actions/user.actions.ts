@@ -37,6 +37,9 @@ export async function updateUser({
 }: UserUpdateParams): Promise<void> {
   try {
    const connectionString = process.env.DATABASE_URL
+
+    const client = postgres(connectionString!)
+    const db =  drizzle(client);
    
     let user = await db
       .insert(users)
