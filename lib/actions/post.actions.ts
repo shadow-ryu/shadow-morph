@@ -7,14 +7,6 @@ import { posts } from "@/lib/db/schema";
 import { InferInsertModel, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-// export async function fetchUsers(userId: string) {
-//   try {
-//     const user = await db.select().from(users).where(eq(users.id, userId));
-//     return user;
-//   } catch (err) {
-//     if (err instanceof Error) console.log(err.stack);
-//   }
-// }
 interface CreatePostParams {
   userId: string;
   title: string;
@@ -28,6 +20,7 @@ export async function createPost({
   guild_id,
 }: CreatePostParams) {
     try {
+      // TODO: make logic to extract data of hastags or metions from content
   let post = await db.insert(posts).values({
     user_id: userId,
     title: title,
