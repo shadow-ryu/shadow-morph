@@ -21,3 +21,14 @@ export const posts = pgTable('posts', {
   createdAt: timestamp('createdAt', { mode: 'string' }).defaultNow(),
   updatedAt: timestamp('updatedAt', { mode: 'string' }).defaultNow(),
 });
+export const guilds = pgTable('guilds', {
+  id: serial('id').primaryKey(),
+  name: varchar('title', { length: 256 }),
+  guild_handle: varchar('guild_handle'),
+  owner_id: varchar('owner_id').references(() => users.id),
+  info: text('info'),
+  guild_logo: text('guild_logo'),
+  tags: text('tags'),
+  createdAt: timestamp('createdAt', { mode: 'string' }).defaultNow(),
+  updatedAt: timestamp('updatedAt', { mode: 'string' }).defaultNow(),
+});
