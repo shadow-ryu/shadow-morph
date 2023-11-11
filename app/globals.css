@@ -70,7 +70,7 @@
 @layer components {
   /* main */
   .main-container {
-    @apply flex min-h-screen flex-1 flex-col items-center  px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+    @apply   min-h-screen  min-w-full;
   }
 
   .bottombar {
@@ -99,3 +99,13 @@
 
 
 }
+
+.mobile-screen {
+  width: 320px; /* Adjust the width for a mobile screen */
+  height: 568px; /* Adjust the height for a mobile screen */
+  border: 1px solid #000;
+  overflow: hidden;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+

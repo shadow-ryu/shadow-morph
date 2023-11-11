@@ -8,6 +8,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { headers } from "next/headers";
 import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,29 +23,26 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const queryClient = new QueryClient();
   return (
-
-      <ClerkProvider>
-         <Providers>
+    <ClerkProvider>
+      <Providers>
         <html lang="en">
-          <body className={inter.className} suppressHydrationWarning={true}>
-            <Navbar />
+          <body className={`${inter.className} w-full h-screen`} suppressHydrationWarning={true}>
+            {/* <Navbar />
 
-            <main className="flex flex-row">
-              <LeftSidebar />
-              <section className="main-container">
-                <div className="w-full max-w-5xl">{children}</div>
-              </section>
-              {/* @ts-ignore */}
-              <RightSidebar />
-            </main>
+              <main className="flex flex-row">
+                <LeftSidebar /> */}
+             {children}
 
-            <BottomNav />
-          <Toaster />
+            {/* @ts-ignore */}
+            {/* <RightSidebar /> */}
+            {/* </main>
+
+              <BottomNav /> */}
+            <Toaster />
           </body>
         </html>
-       </Providers>
-      </ClerkProvider>
+      </Providers>
+    </ClerkProvider>
   );
 }

@@ -19,7 +19,7 @@ const LeftSidebar = () => {
   //   return null
   // }
   return (
-    <section className='custom-scrollbar leftsidebar'>
+    <section className='custom-scrollbar leftsidebar min-w-max'>
       <div className='flex w-full flex-1 flex-col gap-6 px-6'>
         {sidebarLinks.map((link) => {
           const isActive =
@@ -30,7 +30,7 @@ const LeftSidebar = () => {
 
           return (
             <Link
-              href={link.route}
+              href=""
               key={link.label}
               className={`leftsidebar_link ${isActive && "bg-primary-500 "}`}
             >

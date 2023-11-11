@@ -7,11 +7,11 @@ import { usePathname } from "next/navigation";
 
 
 
-function BottomNav() {
+function BottomNav({mobile}) {
   const pathname = usePathname();
 
   return (
-    <section className='bottombar'>
+    <section className={`${mobile ?' w-full rounded-t-3xl bg-glassmorphism p-4 backdrop-blur-lg': 'hidden'}`}>
       <div className='bottombar_container'>
         {sidebarLinks.map((link) => {
           const isActive =
@@ -20,7 +20,7 @@ function BottomNav() {
 
           return (
             <Link
-              href=""
+              href={link.route}
               key={link.label}
               className={`bottombar_link ${isActive && "bg-primary-500"}`}
             >
