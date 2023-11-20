@@ -11,6 +11,11 @@ const nextConfig = {
             },
             {
               protocol: "https",
+              hostname:"wp-mktg.prod.getty1.net",
+             
+            },
+            {
+              protocol: "https",
               hostname: "images.clerk.dev",
             },
             {

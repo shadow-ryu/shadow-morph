@@ -41,7 +41,7 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
     defaultValues: {
       // subredditId,
       title: "",
-      userId:userId,
+      userId: userId,
       content: null,
     },
   });
@@ -146,44 +146,44 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
       };
     }
   }, [isMounted, initializeEditor]);
-//  const { mutate: createPonst } = useMutation({
-//     mutationFn: async ({
-//       title,
-//       content,
-//       userId
-//     }: PostCreationRequest) => {
-//       const payload: PostCreationRequest = { title, content,userId }
-//       const { data } = await axios.post('/api/post/create', payload)
-//       return data
-//     },
-//     onError: () => {
-//       return toast({
-//         title: 'Something went wrong.',
-//         description: 'Your post was not published. Please try again.',
-//         variant: 'destructive',
-//       })
-//     },
-//     onSuccess: () => {
-//       // turn pathname /r/mycommunity/submit into /r/mycommunity
-//       const newPathname = pathname.split('/').slice(0, -1).join('/')
-//       router.push(newPathname)
+  //  const { mutate: createPonst } = useMutation({
+  //     mutationFn: async ({
+  //       title,
+  //       content,
+  //       userId
+  //     }: PostCreationRequest) => {
+  //       const payload: PostCreationRequest = { title, content,userId }
+  //       const { data } = await axios.post('/api/post/create', payload)
+  //       return data
+  //     },
+  //     onError: () => {
+  //       return toast({
+  //         title: 'Something went wrong.',
+  //         description: 'Your post was not published. Please try again.',
+  //         variant: 'destructive',
+  //       })
+  //     },
+  //     onSuccess: () => {
+  //       // turn pathname /r/mycommunity/submit into /r/mycommunity
+  //       const newPathname = pathname.split('/').slice(0, -1).join('/')
+  //       router.push(newPathname)
 
-//       router.refresh()
+  //       router.refresh()
 
-//       return toast({
-//         description: 'Your post has been published.',
-//       })
-//     },
-//   })
+  //       return toast({
+  //         description: 'Your post has been published.',
+  //       })
+  //     },
+  //   })
   async function onSubmit(data: any) {
     const blocks = await ref.current?.save();
 
     const payload: any = {
       title: data.title,
       content: blocks,
-      userId:userId,
+      userId: userId,
     };
-   await   createPost(payload);
+    await createPost(payload);
   }
 
   if (!isMounted) {
@@ -191,13 +191,9 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
   }
   const { ref: titleRef, ...rest } = register("title");
   return (
-    <div className="w-full p-4 bg-zinc-50 rounded-lg border border-zinc-200">
-      <form
-        action=""
-        id="post-form"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div className="prose prose-stone dark:prose-invert">
+    <div className="w-full p-4  text-gray-950  ">
+      <form action="" id="post-form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="">
           <TextareaAutosize
             ref={(e) => {
               titleRef(e);
@@ -206,16 +202,18 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
             }}
             {...rest}
             placeholder="Title"
-            className="w-full resize-none appearance-none overflow-hidden bg-transparent text-3xl font-bold focus:outline-none"
+            className="w-full resize-none appearance-none overflow-hidden p-4 bg-[#f6faef] text-3xl  rounded-md font-bold focus:outline-none"
           />
-          <div id="editor" className="min-h-[500px]" />
-          <p className="text-sm text-gray-500">
-            Use{" "}
-            <kbd className="rounded-md border bg-muted px-1 text-xs uppercase">
-              Tab
-            </kbd>{" "}
-            to open the command menu.
-          </p>
+          <div className="bg-[#f6faef] flex-col justify-start rounded-md items-center">
+            <div id="editor" className="min-h-[500px] min-w-max" />
+            <p className="p-2 text-sm text-gray-500">
+              Use{" "}
+              <kbd className="rounded-md border bg-muted px-1 text-xs uppercase">
+                Tab
+              </kbd>{" "}
+              to open the command menu.
+            </p>
+          </div>
         </div>
       </form>
     </div>

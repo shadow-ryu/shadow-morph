@@ -1,5 +1,5 @@
 
-import AccountProfile from "@/components/custom-ui/forms/AccountProfile";
+import AccountProfile from "@/components/forms/AccountProfile";
 import { fetchUsers } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
