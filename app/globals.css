@@ -33,6 +33,15 @@
     --ring: 222.2 84% 4.9%;
  
     --radius: 0.5rem;
+    --gradient-background-color: linear-gradient(to right, #ff6b6b, #6b47ff);
+    --gradient-banner-background-color: linear-gradient(to right, #ff6b6b, #6b47ff);
+    --text-color: #000; 
+    --header-color: #000;
+    --post-header-color: #000;
+    --post-text-color: #000;
+    --gradient-post-background-color: linear-gradient(to right, #ff6b6b, #6b47ff);
+
+
   }
  
   .dark {
