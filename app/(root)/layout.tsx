@@ -20,10 +20,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  mainModal,
 }: {
   children: React.ReactNode;
-  mainModal: React.ReactNode;
 }) {
   return (
     <ClerkProvider>
@@ -33,8 +31,6 @@ export default function RootLayout({
             className={`${inter.className} w-full h-screen bg-dark-3`}
             suppressHydrationWarning={true}
           >
-            {" "}
-            {mainModal}
             <section className="flex-col w-full h-full">
               <main className="flex flex-row">
                 <LeftSidebar />
