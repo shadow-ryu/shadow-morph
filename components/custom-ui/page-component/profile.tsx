@@ -6,38 +6,27 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import PostPreview from "./PostPreview";
-import { UserAvatar } from "../../UserAvatar";
+import { UserAvatar } from "../UserAvatar";
 import { Button } from "@/components/ui/button";
 
 interface profileProps {
   bannerImag: any;
-  backGroundColor: string;
-  textColor: string;
-  userText: string;
-  postBackGroundColor: string;
-  textPColor: string;
-  pUserText: string;
   postLikeIcon: string;
   postShareIcon: string;
   postCommentIcon: string | undefined;
 }
 const Profile = ({
-  textColor,
+
   bannerImag,
-  backGroundColor,
-  userText,
-  postBackGroundColor,
-  textPColor,
-  pUserText,
   postShareIcon,
   postLikeIcon,
   postCommentIcon,
 }: profileProps) => {
   return (
     <div
-      className="flex flex-col items-center justify-center  rounded h-fit  "
+      className="flex flex-col items-center justify-center  rounded h-fit max-h-[48rem]  "
       style={{
-        backgroundColor: backGroundColor,
+        background: 'var(--gradient-background-color)',
       }}
     >
       {bannerImag ? (
@@ -72,7 +61,7 @@ const Profile = ({
             className="h-12 w-12 backdrop-filter"
           />
           <div className=" text-center ">
-            <h6 style={{ color: userText }}> community name</h6>
+            <h6 style={{ color:'var(--header-color)' }}> community name</h6>
             <p className="text-subded">@community</p>
           </div>
         </div>
@@ -94,7 +83,7 @@ const Profile = ({
           </div>
           <div
             className={`text-justify p-4  text-sm  order-1 `}
-            style={{ color: textColor }}
+            style={{ color:'var(--text-color)'  }}
           >
             <p>
               {" "}
@@ -121,15 +110,16 @@ const Profile = ({
             <div className="flex flex-col justify-between items-center gap-2 h-[20rem]  custom-scrollbar   overflow-scroll">
               {[1, 2, 4, 4].map((ele, index) => {
                 return (
-                  <PostPreview
-                    key={index}
-                    postBackgroundColor={postBackGroundColor}
-                    bodyTextColor={textPColor}
-                    userNameColor={pUserText}
-                    // likeIcon={postLikeIcon}
-                    // shareIcon={postShareIcon}
-                    commentIcon={postCommentIcon}
-                  />
+                  // <PostPreview
+                  //   key={index}
+                  //   postBackgroundColor={postBackGroundColor}
+                  //   bodyTextColor={textPColor}
+                  //   userNameColor={pUserText}
+                  //   // likeIcon={postLikeIcon}
+                  //   // shareIcon={postShareIcon}
+                  //   commentIcon={postCommentIcon}
+                  // />
+                  <></>
                 );
               })}
             </div>

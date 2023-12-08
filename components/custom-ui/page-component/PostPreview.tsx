@@ -10,7 +10,7 @@ import {
 import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { UserAvatar } from "../../UserAvatar";
+import { UserAvatar } from "../UserAvatar";
 import Image from "next/image";
 interface postPreivewprop {
   postBackgroundColor: string;

@@ -43,20 +43,20 @@ export function PresetSelector(props:any) {
   const router = useRouter();
 
   return (
-    <Popover open={open} onOpenChange={setOpen} {...props}>
+    <Popover open={open}  className="text-black" onOpenChange={setOpen} {...props}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
           aria-label="Load a preset..."
           aria-expanded={open}
-          className="flex-1 justify-between md:max-w-[200px] lg:max-w-[400px]"
+          className="flex-1 justify-between md:max-w-[200px] text-black lg:max-w-[400px]"
         >
           {selectedPreset ? selectedPreset : "Load a preset..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="ml-2 h-4 w-4 text-black shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-0">
+      <PopoverContent className="w-[300px] text-black p-0">
         <Command>
           <CommandInput placeholder="Search presets..." />
           <CommandEmpty>No presets found.</CommandEmpty>

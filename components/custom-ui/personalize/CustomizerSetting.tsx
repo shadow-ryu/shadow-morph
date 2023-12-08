@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Heart, MessageSquare, Share2, X } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useMemo, useState } from "react";
-import CustomColorPicker from "./page-component/Colorpicker";
+import CustomColorPicker from "./Colorpicker";
+
 interface UserProfile {
   bannerImage?: any | undefined;
 }
