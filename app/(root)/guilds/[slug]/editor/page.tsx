@@ -16,21 +16,191 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Clock } from "lucide-react";
+import { Clock, Heart, MessageSquare, Share2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import ColorPicker from "react-best-gradient-color-picker";
 import Profile from "@/components/custom-ui/page-component/profile";
-
-const Page = () => {
-  const [preset, setPreset] = useState("post");
+import useStore from "@/store";
+import { saveOrUpdatePreset } from "@/lib/actions/guild.actions";
+import { useUploadThing } from "@/lib/uploadthing";
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+const Page = ({ params }: PageProps) => {
+  const [preset, setPreset] = useState("profile");
   const [screenType, setScreenType] = useState<string>("desktop");
-  useEffect(() => {
-    console.log("pfirst");
 
-    return () => {
-      console.log("psec");
-    };
-  }, []);
+  const { startUpload } = useUploadThing("media");
+
+  const { appCustomizeSetting } = useStore();
+  let Schema = {
+    ProfileSchema: {
+      colorSchema: [
+        {
+          key: "bannerColor",
+          cssVariable: "--gradient-banner-background-color",
+          type: "ColorPicker",
+          label: "Banner Color",
+        },
+        {
+          key: "bannerBorder",
+          type: "ColorPicker",
+          cssVariable: "--gradient-banner-border-color",
+          label: "Banner Border Color",
+        },
+        {
+          key: "background",
+          cssVariable: "--gradient-background-color",
+
+          type: "ColorPicker",
+          label: "Background Color",
+        },
+        {
+          key: "textColor",
+          cssVariable: "--text-color",
+          type: "ColorPicker",
+          label: "Text Color",
+        },
+        {
+          key: "userTitleColor",
+          type: "ColorPicker",
+          cssVariable: "--header-color",
+          label: "User Title Color",
+        },
+      ],
+      customSchema: [
+        {
+          key: "bannerImage",
+          type: "Image",
+          label: "Banner Image",
+        },
+      ],
+    },
+    PostSchema: {
+      colorSchema: [
+        {
+          key: "background",
+          type: "ColorPicker",
+          cssVariable: "--gradient-post-background-color",
+
+          label: "Background Color",
+        },
+        {
+          key: "textColor",
+          type: "ColorPicker",
+          cssVariable: "--text-color",
+
+          label: "Text Color",
+        },
+        {
+          key: "userTitleColor",
+          type: "ColorPicker",
+          cssVariable: "--post-header-color",
+          label: "User Title Color",
+        },
+      ],
+      customSchema: [
+        // {
+        //   key: "bgImage",
+        //   type: "Image",
+        //   label: "background Image",
+        // },
+        {
+          key: "likeIcon",
+          type: "Image",
+          label: "Like Icon",
+          icon: <Heart />,
+        },
+        {
+          key: "shareIcon",
+          type: "Image",
+          label: "share Icon",
+          icon: <Share2 />,
+        },
+        {
+          key: "commentIcon",
+          type: "Image",
+          label: "Comment Icon",
+          icon: <MessageSquare />,
+        },
+      ],
+    },
+  };
+
+  let presets = {
+    profile: {
+      key: "profile",
+      title: "Profile Page",
+      schema: "ProfileSchema",
+    },
+    post: {
+      key: "post",
+      title: "Post (home page)",
+      schema: "PostSchema",
+    },
+    post_detail: {
+      key: "post_detail",
+      title: "Post Detail Page",
+      schema: "PostSchema",
+    },
+  };
+  const applyPresets = async (schema, presets, appCustomizeSetting) => {
+    const result = { ...appCustomizeSetting };
+
+    for (const presetKey in presets) {
+      const preset = presets[presetKey];
+      const schemaKey = preset.schema;
+      const categorySettings = result[presetKey];
+
+      if (schemaKey && schema[schemaKey]) {
+        for (const prop of schema[schemaKey].colorSchema) {
+          const { key, type, cssVariable } = prop;
+
+          if (type === "ColorPicker") {
+            const value = document.documentElement.style.getPropertyValue(
+              cssVariable
+            );
+            categorySettings[key] = value;
+          }
+        }
+
+        for (const prop of schema[schemaKey].customSchema) {
+          const { key, type } = prop;
+
+          if (
+            type === "Image" &&
+            presetKey in appCustomizeSetting &&
+            appCustomizeSetting[presetKey][key]
+          ) {
+            const imgRes = await startUpload(
+              appCustomizeSetting[presetKey][key]
+            );
+            if (imgRes && imgRes[0].url) {
+              console.log(imgRes)
+              categorySettings[key] = imgRes[0]?.url;
+            }
+          }
+        }
+      }
+    }
+
+    return result;
+  };
+
+  const onSave = async () => {
+    const result = applyPresets(Schema, presets, appCustomizeSetting);
+    // const data = await saveOrUpdatePreset({
+    //   guild_id: params.slug,
+    //   type: "guild",
+    //   // id,
+    //   customizeSetting: result,
+    // });
+    console.log(result)
+    console.log("object");
+    // console.log(data);
+  };
 
   return (
     <div className=" h-full w-full flex-col md:flex">
@@ -46,7 +216,7 @@ const Page = () => {
               selectedPreset={preset}
               setSelectedPreset={setPreset}
             />
-            <Button> Save</Button>
+            <Button onClick={onSave}> Save</Button>
           </div>
         </div>
       </div>
@@ -58,7 +228,7 @@ const Page = () => {
             <MobileScreen>
               {preset === "profile" ? (
                 <Profile
-                  bannerImag={""}
+                  bannerImage={""}
                   postLikeIcon={""}
                   postShareIcon={""}
                   postCommentIcon={undefined}
@@ -70,12 +240,8 @@ const Page = () => {
           ) : (
             <DesktopScreen>
               {preset === "profile" ? (
-                <Profile
-                  bannerImag={""}
-                  postLikeIcon={""}
-                  postShareIcon={""}
-                  postCommentIcon={undefined}
-                />
+                // @ts-ignore
+                <Profile {...appCustomizeSetting.profile} />
               ) : (
                 "tests"
               )}

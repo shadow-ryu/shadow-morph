@@ -4,31 +4,17 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { generateLocalURl } from "@/lib/utils";
+import useStore from "@/store";
+import { InitialState, SchemaItem } from "@/types/types";
 import { Heart, MessageSquare, Share2, X } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useMemo, useState } from "react";
+import { json } from "stream/consumers";
+
 import CustomColorPicker from "./Colorpicker";
-
-interface UserProfile {
-  bannerImage?: any | undefined;
-}
-interface UserPost {
-  likeIcon?: any | undefined;
-  shareIcon?: any | undefined;
-  commentIcon?: any | undefined;
-}
-
-interface InitialState {
-  profile: UserProfile;
-  post: UserPost;
-}
-interface SchemaItem {
-  key: string;
-  cssVariable?: string;
-  type: string;
-  label: string;
-}
 let Schema = {
   ProfileSchema: {
     colorSchema: [
@@ -41,7 +27,7 @@ let Schema = {
       {
         key: "bannerBorder",
         type: "ColorPicker",
-        cssVariable: "--gradient-background-color",
+        cssVariable: "--gradient-banner-border-color",
         label: "Banner Border Color",
       },
       {
@@ -144,12 +130,19 @@ let presets = {
 const initial: InitialState = {
   profile: {
     bannerImage: undefined,
+    bannerColor: "",
+    isBanner: false,
+    bannerBorder: "",
+    background: "",
+    textColor: "",
+    userTitleColor: "",
   },
   post: {
     likeIcon: undefined,
     shareIcon: undefined,
     commentIcon: undefined,
   },
+  post_detail: {},
 };
 const CustomizeSetting = ({
   initialState,
@@ -158,55 +151,39 @@ const CustomizeSetting = ({
   initialState: any;
   preset: string;
 }) => {
-  const [userPersonalization, setUserPersonalization] = useState(initial);
-  //   let IIImage;
+  const [userPersonalization, setUserPersonalization] = useState(
+    initialState || initial
+  );
+  const { setCustomizeSetting, appCustomizeSetting } = useStore();
   const memoizedUserPersonalization = useMemo(() => userPersonalization, [
     userPersonalization,
   ]);
 
-  const generateLocalURl = (file: any) => {
-    if (!file) return;
-    return URL.createObjectURL(file);
-  };
-  const handleImage = (e: any) => {
-    console.log(e.target.files[0]);
-
-    const file = e.target.files[0];
-    let result = "";
-    if (file) {
-      const imageURL = URL.createObjectURL(file);
-      //   setBanner(file);
-      result = file;
-    }
-    console.log(result);
-    return result;
-  };
   interface CustomizationParams {
     value: string;
     template: string;
     property: string;
     isImage?: boolean;
+    destroy?: boolean;
   }
   const handleCustomization = ({
     value,
     template,
     property,
+    destroy = false,
   }: CustomizationParams) => {
-    setUserPersonalization((prevPersonalization) => ({
+
+    setCustomizeSetting((prevPersonalization) => ({
       ...prevPersonalization,
       [template]: {
         ...prevPersonalization[template],
-        [property]: value,
+        [property]: destroy ? undefined : value,
       },
     }));
-  };
-  useEffect(() => {
-    console.log("first");
+    console.log("first", appCustomizeSetting[template][property]);
 
-    return () => {
-      console.log("sec");
-    };
-  }, []);
+    
+  };
 
   return (
     <div className="p-2">
@@ -216,7 +193,11 @@ const CustomizeSetting = ({
           /* @ts-ignore */
           const current = Schema[presets[preset]?.schema][schemaKey];
           return (
-            <AccordionItem key={schemaKey} className="border border-black  rounded px-2 my-1 py-1" value={schemaKey}>
+            <AccordionItem
+              key={schemaKey}
+              className="border border-black  rounded px-2 my-1 py-1"
+              value={schemaKey}
+            >
               <AccordionTrigger>{schemaKey}</AccordionTrigger>
               <AccordionContent>
                 {current.map((schema: SchemaItem, index: number) => {
@@ -232,27 +213,28 @@ const CustomizeSetting = ({
                         />
                       ) : schema.type === "Image" ? (
                         <div className="flex  my-1 w-fit  text-left justify-evenly gap-2 items-center">
-                          {userPersonalization[preset] &&
-                          userPersonalization[preset][prop] !== undefined ? (
+                          {appCustomizeSetting[preset] &&
+                          appCustomizeSetting[preset][prop] !== undefined ? (
                             <div className="flex justify-evenly items-center">
                               <p className="relative h-fit w-fit  p-1 flex justify-center items-center gap-2 rounded">
                                 <Image
                                   width={20}
                                   height={20}
                                   src={generateLocalURl(
-                                    userPersonalization[preset][prop]
+                                    appCustomizeSetting[preset][prop]
                                   )}
                                   alt={schema.key}
                                   className="w-[2rem] h-[2rem] mr-1  rounded-lg"
                                 />
                                 <X
                                   onClick={() => {
-                                    console.log(schema.key);
+                                    console.log("object");
                                     handleCustomization({
                                       // @ts-ignore
                                       value: undefined,
                                       template: preset,
                                       property: prop,
+                                      destroy: true,
                                     });
                                   }}
                                   height={10}
@@ -298,6 +280,11 @@ const CustomizeSetting = ({
                                   value: file,
                                   template: preset,
                                   property: prop,
+                                });
+                                setCustomizeSetting({
+                                  profile: {
+                                    bannerImage: file,
+                                  },
                                 });
                               } else {
                                 console.log("No file selected");

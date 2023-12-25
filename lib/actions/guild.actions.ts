@@ -68,66 +68,58 @@ interface BuildPresetParams {
   comment_border: string;
   comment_bg_image: string;
 }
-export async function saveOrUpdatePreset({
-  userTitleColor,
-  owner_id,
-  guild_id,
-  background,
-  text_color,
-  banner_color,
-  banner_border,
-  banner_image,
-  post_bg_color,
-  post_border,
-  post_bg_image,
-  comment_button_image,
-  comment_color,
-  comment_font_color,
-  comment_border,
-  comment_bg_image,
-}: BuildPresetParams) {
-  try {
-    // Use a single query to get the user and handle errors
-    const [user] = await db.select().from(users).where(eq(users.id, owner_id));
+// Import your database module
 
+export async function saveOrUpdatePreset({
+  guild_id,
+  type,
+  id = null,
+  customizeSetting,
+}: any) {
+  const { post, profile } = customizeSetting;
+console.log(profile)
+  try {
+    // Assuming you have a way to get the user by owner_id
+    // const user = await db.select().from(users).where(eq(users.id, owner_id)).first();
+    const user = { id: "user_2XRjBc1msivqXqPTydMGKJamWqX" };
     if (!user) {
       throw new Error("User not found");
     }
 
-    // Use concise object property shorthand for better readability
     const presetData = {
-      userTitleColor,
+      postSetting:post,
       owner_id: user.id,
       guild_id,
-      background,
-      text_color,
-      banner_color,
-      banner_border,
-      banner_image,
-      post_bg_color,
-      post_border,
-      post_bg_image,
-      comment_button_image,
-      comment_color,
-      comment_font_color,
-      comment_border,
-      comment_bg_image,
+      type,
+      profileSetting:profile,
     };
 
-    // Use a single query to insert and return the result
-    const [guild] = await db.insert(presets).values(presetData).returning();
+    // Filter out undefined or null values from presetData
+    const filteredPresetData = Object.fromEntries(
+      Object.entries(presetData).filter(
+        ([_, value]) => value !== undefined && value !== null
+      )
+    );
 
-    if (guild) {
-      return {
-        data: guild,
-        message: "Created",
-        success: true,
-      };
-    }
+    // Use a single query to insert and return the result
+    const [preset] = await db
+      .insert(presets)
+      .values(filteredPresetData)
+      .returning();
+
+    console.log(preset, "preset");
+
+    return {
+      data: preset,
+      message: "Created",
+      success: true,
+    };
   } catch (error) {
-    return { message: "Failed to create" };
+    console.error(error);
+    return { message: error.message || "An error occurred" };
   }
 }
+
 interface subscriptionProps {
   guild_id: string;
   userId: string;
@@ -156,11 +148,15 @@ export async function handleSubscription({
           guildId: guild_id, // Corrected variable names to match your code
           userId: user_id,
         });
-        return { message: "Unsubscribed successfully", success: true , variant:"success"};
+        return {
+          message: "Unsubscribed successfully",
+          success: true,
+          variant: "success",
+        };
       } else {
         return {
           message: "Unsubscribed unsuccessfully ,try again later",
-          variant:"destructive",
+          variant: "destructive",
           success: false,
         };
       }
@@ -170,16 +166,24 @@ export async function handleSubscription({
           .insert(subscriptionsTable)
           .values({ guildId: guild_id, userId: user_id });
 
-        return { message: "Subscribed successfully", success: true ,variant:"success"};
+        return {
+          message: "Subscribed successfully",
+          success: true,
+          variant: "success",
+        };
       } else {
         return {
           message: "You're already subscribed to this guild",
-          variant:"warning",
+          variant: "warning",
           success: true,
         };
       }
     }
   } catch (error) {
-    return { message: "Failed to handle subscription", variant:"destructive", success: false };
+    return {
+      message: "Failed to handle subscription",
+      variant: "destructive",
+      success: false,
+    };
   }
 }

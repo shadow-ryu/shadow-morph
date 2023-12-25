@@ -28,7 +28,7 @@ export const userRelations = relations(users, ({ one, many }) => ({
   posts: many(posts),
   guilds:many(guilds)
 }));
-export const posts = pgTable("posts", {
+export const posts:any = pgTable("posts", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 256 }),
   authorId: varchar("authorId").references(() => users.id),
@@ -49,7 +49,7 @@ export const postRelations = relations(posts, ({ one, many }) => ({
     fields: [posts.guildId],
     references: [guilds.id],
   }),
-  postConfigurations:many(postConfigurations),
+  // postConfigurations:many(postConfigurations),
   posts: many(posts),
 }));
 
@@ -74,44 +74,37 @@ export const guilds = pgTable("guilds", {
  */
 export const presets = pgTable("presets", {
   id: serial("id").primaryKey(),
-  userTitleColor: varchar("userTitleColor"),
+  type: varchar("type"),
   ownerId: varchar("ownerId").references(() => users.id),
   guildId: integer("guildId").references(() => guilds.id),
-  background: varchar("background_color"),
-  textColor: varchar("textColor"),
-  bannerColor: varchar("bannerColor"),
-  bannerBorder: varchar("bannerBorder"),
-  bannerImage: varchar("banner_image"),
-  postBgColor: varchar("bannerImage"),
-  postBorder: varchar("postBorder"),
-  postTxtColor: varchar("postTxtColor"),
-  
+  postSetting:json("postSetting"),
+  profileSetting:json("profileSetting"),
   createdAt: timestamp("createdAt", { mode: "string" }).defaultNow(),
   updatedAt: timestamp("updatedAt", { mode: "string" }).defaultNow(),
 });
-export const subscriptions = pgTable(
-  "subscriptions",
-  {
-    userId: varchar("userId").references(() => users.id),
-    guildId: varchar("guildId").references(() => guilds.id),
-  },
-  (self) => ({
-    primaryKey: [self.userId, self.guildId],
-  })
-);
+// export const subscriptions = pgTable(
+//   "subscriptions",
+//   {
+//     userId: varchar("userId").references(() => users.id),
+//     guildId: varchar("guildId").references(() => guilds.id),
+//   },
+//   (self) => ({
+//     primaryKey: [self.userId, self.guildId],
+//   })
+// );
 
  
-export const likeEnum = pgEnum('unlike', ['like']);
+// export const likeEnum = pgEnum('unlike', ['like']);
  
-export const postConfigurations = pgTable(
-  "post_configurations",
-  {
-    userId: varchar("user_id").references(() => users.id),
-    postId: varchar("post_id").references(() => posts.id),
-    bookmark: boolean("bookmark").default(false),
-    mood: likeEnum('unlike'),
-  },
-  (self) => ({
-    primaryKey: [self.userId, self.postId],
-  })
-);
+// export const postConfigurations = pgTable(
+//   "post_configurations",
+//   {
+//     userId: varchar("user_id").references(() => users.id),
+//     postId: varchar("post_id").references(() => posts.id),
+//     bookmark: boolean("bookmark").default(false),
+//     // mood: likeEnum('unlike'),
+//   },
+//   (self) => ({
+//     primaryKey: [self.userId, self.postId],
+//   })
+// );

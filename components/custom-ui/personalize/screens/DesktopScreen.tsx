@@ -14,7 +14,7 @@ const DesktopScreen = ({ children }: { children?: React.ReactNode }) => {
         </div>
       </div>
 
-      <div className="bg-gray-800 rounded-b-lg">
+      <div className="bg-current rounded-b-lg">
         <div className="max-w-full  h-full min-h-[40rem] rounded-b-lg bg-gray-300">
           {children}
         </div>

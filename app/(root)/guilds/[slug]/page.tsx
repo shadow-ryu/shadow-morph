@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { communityTabs } from "@/lib/constants";
 import ThreadsTab from "@/components/common/ThreadsTab";
-import SubscribeLeaveToggle from "@/components/custom-ui/SubscribeLeaveToggle";
+// import SubscribeLeaveToggle from "@/components/custom-ui/SubscribeLeaveToggle";
 import { currentUser, useAuth } from "@clerk/nextjs";
 interface PageProps {
   params: {
@@ -106,7 +106,7 @@ const Page = async ({ params }: PageProps) => {
               </div>
             </div>
             <div className="">
-              <SubscribeLeaveToggle guildId={slug} isSubscribed={false} />
+              {/* <SubscribeLeaveToggle guildId={slug} isSubscribed={false} /> */}
             </div>
           </div>
 

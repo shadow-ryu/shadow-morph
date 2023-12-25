@@ -9,7 +9,10 @@ export function isBase64Image(imageData: string) {
   const base64Regex = /^data:image\/(png|jpe?g|gif|webp);base64,/;
   return base64Regex.test(imageData);
 }
-
+export   const generateLocalURl = (file: any) => {
+  if (!file) return;
+  return URL.createObjectURL(file);
+};
 export function formatDateString(dateString: string) {
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
