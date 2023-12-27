@@ -162,8 +162,8 @@ const Page = ({ params }: PageProps) => {
       )} Page  customizations  has been saved.`,
     });
     // console.log(data);
+    handleOnDiscard();
   };
-  handleOnDiscard();
 
   return (
     <div className=" h-full w-full flex-col md:flex">
