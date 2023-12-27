@@ -5,7 +5,7 @@ import { PresetSelector } from "@/components/custom-ui/personalize/PresetSelecto
 import ScreenPreviewSelector from "@/components/custom-ui/personalize/ScreenPreviewSelector";
 import DesktopScreen from "@/components/custom-ui/personalize/screens/DesktopScreen";
 import MobileScreen from "@/components/custom-ui/personalize/screens/MobileScreen";
-
+import loadDash from "lodash";
 import { Button } from "@/components/ui/button";
 import {
   HoverCard,
@@ -16,191 +16,154 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Clock, Heart, MessageSquare, Share2 } from "lucide-react";
+import { Clock, CloudFog, Heart, MessageSquare, Share2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import ColorPicker from "react-best-gradient-color-picker";
 import Profile from "@/components/custom-ui/page-component/profile";
 import useStore from "@/store";
 import { saveOrUpdatePreset } from "@/lib/actions/guild.actions";
 import { useUploadThing } from "@/lib/uploadthing";
+import { AppCustomizeSetting } from "@/types/types";
+import AlertPopup from "@/components/common/AlertPopup";
+import { presetFormSchema } from "@/constants/uiSchema";
+import { Icons } from "@/components/ui/shacdnUiIcons";
+import { toast, useToast } from "@/hooks/use-toast";
+import { upperCaseFirstChar } from "@/lib/utils";
 interface PageProps {
   params: {
     slug: string;
   };
 }
+const initialState = {
+  status: "pending",
+  presetType: "profile",
+
+  bannerBorder: "#000",
+  background: "#000",
+  textColor: "fff",
+  userTitleColor: "",
+  borderColor: "",
+  customSetting: [],
+};
 const Page = ({ params }: PageProps) => {
   const [preset, setPreset] = useState("profile");
   const [screenType, setScreenType] = useState<string>("desktop");
-
+  const [appCustomizeSetting, setAppCustomizeSetting] = useState<
+    AppCustomizeSetting
+  >(initialState);
+  // const {toasts} =useToast;
+  const [isUploading, setUploading] = useState(false);
   const { startUpload } = useUploadThing("media");
+  const handleStatus = (status = "draft", clear = false) => {
+    if (appCustomizeSetting.status === "draft" && !clear) return;
+    setAppCustomizeSetting((prevPersonalization) => ({
+      ...prevPersonalization,
 
-  const { appCustomizeSetting } = useStore();
-  let Schema = {
-    ProfileSchema: {
-      colorSchema: [
-        {
-          key: "bannerColor",
-          cssVariable: "--gradient-banner-background-color",
-          type: "ColorPicker",
-          label: "Banner Color",
+      status: status,
+    }));
+  };
+  const handleCustomization = ({
+    value,
+    key,
+    isNested = false,
+    parentKey,
+    destroy = false,
+  }: any) => {
+    let newValue = destroy ? undefined : value;
+    if (isNested) {
+      setAppCustomizeSetting((prevPersonalization) => ({
+        ...prevPersonalization,
+        [parentKey]: {
+          // @ts-ignore
+          ...prevPersonalization[parentKey],
+          [key]: newValue,
         },
-        {
-          key: "bannerBorder",
-          type: "ColorPicker",
-          cssVariable: "--gradient-banner-border-color",
-          label: "Banner Border Color",
-        },
-        {
-          key: "background",
-          cssVariable: "--gradient-background-color",
+      }));
+    } else {
+      setAppCustomizeSetting((prevPersonalization) => ({
+        ...prevPersonalization,
 
-          type: "ColorPicker",
-          label: "Background Color",
-        },
-        {
-          key: "textColor",
-          cssVariable: "--text-color",
-          type: "ColorPicker",
-          label: "Text Color",
-        },
-        {
-          key: "userTitleColor",
-          type: "ColorPicker",
-          cssVariable: "--header-color",
-          label: "User Title Color",
-        },
-      ],
-      customSchema: [
-        {
-          key: "bannerImage",
-          type: "Image",
-          label: "Banner Image",
-        },
-      ],
-    },
-    PostSchema: {
-      colorSchema: [
-        {
-          key: "background",
-          type: "ColorPicker",
-          cssVariable: "--gradient-post-background-color",
-
-          label: "Background Color",
-        },
-        {
-          key: "textColor",
-          type: "ColorPicker",
-          cssVariable: "--text-color",
-
-          label: "Text Color",
-        },
-        {
-          key: "userTitleColor",
-          type: "ColorPicker",
-          cssVariable: "--post-header-color",
-          label: "User Title Color",
-        },
-      ],
-      customSchema: [
-        // {
-        //   key: "bgImage",
-        //   type: "Image",
-        //   label: "background Image",
-        // },
-        {
-          key: "likeIcon",
-          type: "Image",
-          label: "Like Icon",
-          icon: <Heart />,
-        },
-        {
-          key: "shareIcon",
-          type: "Image",
-          label: "share Icon",
-          icon: <Share2 />,
-        },
-        {
-          key: "commentIcon",
-          type: "Image",
-          label: "Comment Icon",
-          icon: <MessageSquare />,
-        },
-      ],
-    },
+        [key]: newValue,
+      }));
+    }
   };
 
-  let presets = {
-    profile: {
-      key: "profile",
-      title: "Profile Page",
-      schema: "ProfileSchema",
-    },
-    post: {
-      key: "post",
-      title: "Post (home page)",
-      schema: "PostSchema",
-    },
-    post_detail: {
-      key: "post_detail",
-      title: "Post Detail Page",
-      schema: "PostSchema",
-    },
-  };
-  const applyPresets = async (schema, presets, appCustomizeSetting) => {
-    const result = { ...appCustomizeSetting };
+  const applyPresets = async () => {
+    const result = loadDash.cloneDeep(appCustomizeSetting);
+    const presetSchema = presetFormSchema.filter(
+      (schema) => schema.presetType === "" || schema.presetType === preset
+    );
 
-    for (const presetKey in presets) {
-      const preset = presets[presetKey];
-      const schemaKey = preset.schema;
-      const categorySettings = result[presetKey];
+    for (const prop of presetSchema) {
+      const {
+        key,
+        isNested,
+        parentKey,
+        presetType,
+        elementType,
+        cssVariable,
+      } = prop;
 
-      if (schemaKey && schema[schemaKey]) {
-        for (const prop of schema[schemaKey].colorSchema) {
-          const { key, type, cssVariable } = prop;
-
-          if (type === "ColorPicker") {
-            const value = document.documentElement.style.getPropertyValue(
-              cssVariable
-            );
-            categorySettings[key] = value;
+      switch (elementType) {
+        case "ColorPicker":
+          const value = document.documentElement.style.getPropertyValue(
+            cssVariable
+          );
+          if (isNested) {
+            result[parentKey][key] = value;
+          } else {
+            result[key] = value;
           }
-        }
-
-        for (const prop of schema[schemaKey].customSchema) {
-          const { key, type } = prop;
-
-          if (
-            type === "Image" &&
-            presetKey in appCustomizeSetting &&
-            appCustomizeSetting[presetKey][key]
-          ) {
-            const imgRes = await startUpload(
-              appCustomizeSetting[presetKey][key]
-            );
-            if (imgRes && imgRes[0].url) {
-              console.log(imgRes)
-              categorySettings[key] = imgRes[0]?.url;
+          break;
+        case "Image":
+          let file =
+            result[parentKey][key] ||
+            result[key] ||
+            appCustomizeSetting[parentKey][key] ||
+            appCustomizeSetting[key];
+          // console.log(file,result)
+          const imgRes = await startUpload([file]);
+          if (imgRes && imgRes[0].url) {
+            if (isNested) {
+              result[parentKey][key] = imgRes[0]?.url;
+            } else {
+              result[key] = imgRes[0]?.url;
             }
           }
-        }
+          break;
+        default:
+          break;
       }
     }
 
     return result;
   };
 
-  const onSave = async () => {
-    const result = applyPresets(Schema, presets, appCustomizeSetting);
+  const handleOnDiscard = () => {
+    setAppCustomizeSetting(initialState);
+  };
+  const handleOnSave = async () => {
+    setUploading(true);
+    const result = await applyPresets();
     // const data = await saveOrUpdatePreset({
     //   guild_id: params.slug,
     //   type: "guild",
     //   // id,
     //   customizeSetting: result,
     // });
-    console.log(result)
-    console.log("object");
+    console.log(result);
+    handleStatus("saved", true);
+    setUploading(false);
+    toast({
+      title: "Saved Successfully",
+      variant: "success",
+      description: `${upperCaseFirstChar(
+        preset
+      )} Page  customizations  has been saved.`,
+    });
     // console.log(data);
   };
+  handleOnDiscard();
 
   return (
     <div className=" h-full w-full flex-col md:flex">
@@ -213,10 +176,27 @@ const Page = ({ params }: PageProps) => {
               setScreenType={setScreenType}
             />
             <PresetSelector
+              disabled={appCustomizeSetting.status === "draft"}
               selectedPreset={preset}
               setSelectedPreset={setPreset}
             />
-            <Button onClick={onSave}> Save</Button>
+            {appCustomizeSetting?.status === "draft" && !isUploading ? (
+              <AlertPopup
+                title="Are you absolutely sure?"
+                description={`This action cannot be undone. This will permanently delete your unsaved changes  for ${preset} page. `}
+                btnText="Discard"
+                onContinue={handleOnDiscard}
+              />
+            ) : (
+              <></>
+            )}
+
+            <Button disabled={isUploading} onClick={handleOnSave}>
+              {isUploading && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Save
+            </Button>
           </div>
         </div>
       </div>
@@ -228,7 +208,7 @@ const Page = ({ params }: PageProps) => {
             <MobileScreen>
               {preset === "profile" ? (
                 <Profile
-                  bannerImage={""}
+                  customSetting={""}
                   postLikeIcon={""}
                   postShareIcon={""}
                   postCommentIcon={undefined}
@@ -241,7 +221,7 @@ const Page = ({ params }: PageProps) => {
             <DesktopScreen>
               {preset === "profile" ? (
                 // @ts-ignore
-                <Profile {...appCustomizeSetting.profile} />
+                <Profile {...appCustomizeSetting} />
               ) : (
                 "tests"
               )}
@@ -250,7 +230,12 @@ const Page = ({ params }: PageProps) => {
         </div>
         <div className="hidden flex-col col-span-1 min-w-[20rem] bg-gray-200 space-y-4 sm:flex md:order-2 h-full min-h-[40rem]  rounded p-2 ">
           <div className="">
-            <CustomizeSetting preset={preset} initialState={undefined} />
+            <CustomizeSetting
+              preset={preset}
+              initial={appCustomizeSetting}
+              handleStatus={handleStatus}
+              handleCustomization={handleCustomization}
+            />
           </div>
         </div>
       </div>

@@ -8,25 +8,14 @@ const useStore = create<StoreType>((set) => ({
   },
   appCustomizeSetting: {
     status: "draft",
-    profile: {
-      bannerImage: undefined,
-      bannerColor: "",
-      isBanner: false,
-      bannerBorder: "",
-      background: "",
-      textColor: "",
-      userTitleColor: "",
-    },
-    post: {
-      bannerBorder: "",
-      background: "",
-      textColor: "",
-      userTitleColor: "",
-      likeIcon: "",
-      shareIcon: "",
-      commentIcon: "",
-    },
-    post_detail: {},
+    presetType: "profile",
+
+    bannerBorder: "#000",
+    background: "#000",
+    textColor: "fff",
+    userTitleColor: "",
+    borderColor: "",
+    customSetting: [],
   },
   setAppSetting: (settings) =>
     set((state) => ({ appSetting: { ...state.appSetting, ...settings } })),

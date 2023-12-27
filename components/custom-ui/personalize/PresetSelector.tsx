@@ -37,17 +37,23 @@ let presets = [
     schema: "PostSchema",
   },
 ];
-export function PresetSelector(props:any) {
-  const { selectedPreset, setSelectedPreset } = props;
+export function PresetSelector(props: any) {
+  const { selectedPreset, setSelectedPreset, disabled } = props;
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
 
   return (
-    <Popover open={open}  className="text-black" onOpenChange={setOpen} {...props}>
+    <Popover
+      open={open}
+      className="text-black"
+      onOpenChange={setOpen}
+      {...props}
+    >
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
+          disabled={disabled}
           aria-label="Load a preset..."
           aria-expanded={open}
           className="flex-1 justify-between md:max-w-[200px] text-black lg:max-w-[400px]"

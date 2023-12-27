@@ -19,7 +19,7 @@ import { communityTabs } from "@/lib/constants";
 import { generateLocalURl } from "@/lib/utils";
 
 interface profileProps {
-  bannerImage: any;
+  customSetting: any;
   postLikeIcon: string;
   postShareIcon: string;
   postCommentIcon: string | undefined;
@@ -27,7 +27,7 @@ interface profileProps {
 
 const Profile = (profileSetting: profileProps) => {
   const {
-    bannerImage,
+    customSetting,
     postShareIcon,
     postLikeIcon,
     postCommentIcon,
@@ -83,9 +83,9 @@ const Profile = (profileSetting: profileProps) => {
       </div>
       <div className="flex-col justify-center items-center w-full h-full">
         <div className="h-[8rem] ">
-          {bannerImage ? (
+          {customSetting.bannerImage ? (
             <Image
-              src={generateLocalURl(bannerImage) || ""}
+              src={generateLocalURl(customSetting.bannerImage) || ""}
               alt="banner"
               className="rounded-sm w-full  h-52 "
               width={100}

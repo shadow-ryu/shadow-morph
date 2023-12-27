@@ -110,7 +110,6 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
   }, []);
   useEffect(() => {
     if (Object.keys(errors).length) {
-      console.log(errors);
       for (const [_key, value] of Object.entries(errors)) {
         value;
         toast({

@@ -22,31 +22,19 @@ export interface AppSetting {
   personalMessageSelected: boolean;
   notification: boolean;
 }
-export  interface AppCustomizeSetting{
-  status:string;
-    profile: {
-        bannerImage: any | undefined,
-        bannerColor:string,
-        isBanner?:boolean,
-        bannerBorder:string,
-        background:string,
-        textColor:string,
-        userTitleColor:string,
-      },
-      post: {
-        bannerBorder:string,
-        background:string,
-        textColor:string,
-        userTitleColor:string,
-        likeIcon: string,
-        shareIcon: string,
-        commentIcon: string,
-      },
+export interface AppCustomizeSetting {
+  status: string;
+  presetType: string;
+  bannerBorder: string;
+  background: string;
+  textColor: string;
+  userTitleColor: string;
+  borderColor: string;
+  customSetting: undefined | Array<any>;
 }
 export interface StoreType {
   appSetting: AppSetting;
   setAppSetting: (settings: AppSetting) => void;
-  appCustomizeSetting:AppCustomizeSetting;
+  appCustomizeSetting: AppCustomizeSetting;
   setCustomizeSetting: (appCustomizeSetting: AppCustomizeSetting) => void;
-
 }

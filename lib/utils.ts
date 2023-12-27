@@ -13,6 +13,9 @@ export   const generateLocalURl = (file: any) => {
   if (!file) return;
   return URL.createObjectURL(file);
 };
+export const upperCaseFirstChar=(string:string)=>{
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 export function formatDateString(dateString: string) {
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
