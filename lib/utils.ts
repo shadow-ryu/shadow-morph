@@ -33,3 +33,13 @@ export function formatDateString(dateString: string) {
 
   return `${time} - ${formattedDate}`;
 }
+
+export const generateResponse=({status=404,success=false,data={},err=true,message=""})=>{
+  return {
+    data,
+    message,
+    success,
+    status,err
+  }
+
+}

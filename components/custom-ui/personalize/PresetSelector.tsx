@@ -76,10 +76,10 @@ export function PresetSelector(props: any) {
                     value:preset.key,
                     key:"presetType",
                   })
-                  setSelectedPreset({
-                    value:"pending",
-                    key:"status",
-                  })
+                  // setSelectedPreset({
+                  //   value:"pending",
+                  //   key:"status",
+                  // })
                   setOpen(false);
                 }}
               >
