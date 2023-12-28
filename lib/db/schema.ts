@@ -74,11 +74,15 @@ export const guilds = pgTable("guilds", {
  */
 export const presets = pgTable("presets", {
   id: serial("id").primaryKey(),
-  type: varchar("type"),
+  presetType: varchar("presetType"),
+  pageType: varchar("pageType"),
   ownerId: varchar("ownerId").references(() => users.id),
   guildId: integer("guildId").references(() => guilds.id),
-  postSetting:json("postSetting"),
-  profileSetting:json("profileSetting"),
+  pageBorder:  varchar("pageBorder"),
+  backgroundColor: varchar("backgroundColor"),
+  textColor:  varchar("textColor"),
+  userTitleColor: varchar("userTitleColor"),
+  customSetting:json("customSetting"),
   createdAt: timestamp("createdAt", { mode: "string" }).defaultNow(),
   updatedAt: timestamp("updatedAt", { mode: "string" }).defaultNow(),
 });

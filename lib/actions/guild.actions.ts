@@ -3,11 +3,12 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
 import { db } from "@/lib/db";
-import { guilds, presets, subscriptionsTable, users } from "@/lib/db/schema";
+import { guilds, presets, users } from "@/lib/db/schema";
 import { InferInsertModel, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { PgVarchar } from "drizzle-orm/pg-core";
+import { generateResponse } from "../utils";
 
 interface BuildGuildParams {
   name: string;
@@ -70,53 +71,64 @@ interface BuildPresetParams {
 }
 // Import your database module
 
-export async function saveOrUpdatePreset({
-  guild_id,
-  type,
-  id = null,
-  customizeSetting,
-}: any) {
-  const { post, profile } = customizeSetting;
-console.log(profile)
+export async function saveOrUpdatePreset({ customizeSetting }: any) {
+  // console.log(profile);
   try {
     // Assuming you have a way to get the user by owner_id
-    // const user = await db.select().from(users).where(eq(users.id, owner_id)).first();
-    const user = { id: "user_2XRjBc1msivqXqPTydMGKJamWqX" };
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, customizeSetting.owner_id));
+    // const user = { id: "user_2XRjBc1msivqXqPTydMGKJamWqX" };
     if (!user) {
-      throw new Error("User not found");
+      return generateResponse({
+        message: "User not found",
+      });
     }
-
-    const presetData = {
-      postSetting:post,
-      owner_id: user.id,
-      guild_id,
-      type,
-      profileSetting:profile,
-    };
+    if (customizeSetting.pageType === "guild") {
+      const guild = await db
+        .select()
+        .from(guilds)
+        .where(eq(guilds.id, customizeSetting.guildId));
+      if (!guild) {
+        return generateResponse({
+          message: "Guild not found",
+        });
+      }
+    }
 
     // Filter out undefined or null values from presetData
     const filteredPresetData = Object.fromEntries(
-      Object.entries(presetData).filter(
+      Object.entries(customizeSetting).filter(
         ([_, value]) => value !== undefined && value !== null
       )
     );
 
     // Use a single query to insert and return the result
+    if (filteredPresetData.presetId) {
+    }
     const [preset] = await db
       .insert(presets)
       .values(filteredPresetData)
+      .onConflictDoUpdate({
+        target: presets.id,
+        set: { ...filteredPresetData },
+        where: eq(presets.id, filteredPresetData.presetId || ""),
+      })
       .returning();
 
     console.log(preset, "preset");
 
-    return {
+    return generateResponse({
       data: preset,
+      status: 200,
+      err: false,
       message: "Created",
       success: true,
-    };
+    });
   } catch (error) {
     console.error(error);
-    return { message: error.message || "An error occurred" };
+    return generateResponse({ message: error || "An error occurred" });
   }
 }
 
@@ -126,64 +138,64 @@ interface subscriptionProps {
   unSub: boolean;
 }
 
-export async function handleSubscription({
-  guild_id,
-  userId: user_id,
-  unSub = false,
-}: subscriptionProps) {
-  try {
-    const subscriptionRecord = await db
-      .select()
-      .from(subscriptionsTable)
-      .where({
-        // @ts-ignore
-        guildId: guild_id,
-        userId: user_id,
-      });
+// export async function handleSubscription({
+//   guild_id,
+//   userId: user_id,
+//   unSub = false,
+// }: subscriptionProps) {
+//   try {
+//     const subscriptionRecord = await db
+//       .select()
+//       .from(subscriptionsTable)
+//       .where({
+//         // @ts-ignore
+//         guildId: guild_id,
+//         userId: user_id,
+//       });
 
-    if (unSub) {
-      if (subscriptionRecord) {
-        await db.delete(subscriptionsTable).where({
-          // @ts-ignore
-          guildId: guild_id, // Corrected variable names to match your code
-          userId: user_id,
-        });
-        return {
-          message: "Unsubscribed successfully",
-          success: true,
-          variant: "success",
-        };
-      } else {
-        return {
-          message: "Unsubscribed unsuccessfully ,try again later",
-          variant: "destructive",
-          success: false,
-        };
-      }
-    } else {
-      if (!subscriptionRecord) {
-        await db
-          .insert(subscriptionsTable)
-          .values({ guildId: guild_id, userId: user_id });
+//     if (unSub) {
+//       if (subscriptionRecord) {
+//         await db.delete(subscriptionsTable).where({
+//           // @ts-ignore
+//           guildId: guild_id, // Corrected variable names to match your code
+//           userId: user_id,
+//         });
+//         return {
+//           message: "Unsubscribed successfully",
+//           success: true,
+//           variant: "success",
+//         };
+//       } else {
+//         return {
+//           message: "Unsubscribed unsuccessfully ,try again later",
+//           variant: "destructive",
+//           success: false,
+//         };
+//       }
+//     } else {
+//       if (!subscriptionRecord) {
+//         await db
+//           .insert(subscriptionsTable)
+//           .values({ guildId: guild_id, userId: user_id });
 
-        return {
-          message: "Subscribed successfully",
-          success: true,
-          variant: "success",
-        };
-      } else {
-        return {
-          message: "You're already subscribed to this guild",
-          variant: "warning",
-          success: true,
-        };
-      }
-    }
-  } catch (error) {
-    return {
-      message: "Failed to handle subscription",
-      variant: "destructive",
-      success: false,
-    };
-  }
-}
+//         return {
+//           message: "Subscribed successfully",
+//           success: true,
+//           variant: "success",
+//         };
+//       } else {
+//         return {
+//           message: "You're already subscribed to this guild",
+//           variant: "warning",
+//           success: true,
+//         };
+//       }
+//     }
+//   } catch (error) {
+//     return {
+//       message: "Failed to handle subscription",
+//       variant: "destructive",
+//       success: false,
+//     };
+//   }
+// }
