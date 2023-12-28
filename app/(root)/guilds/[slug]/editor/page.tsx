@@ -51,7 +51,6 @@ const Page = ({ params }: PageProps) => {
   const [appCustomizeSetting, setAppCustomizeSetting] = useState<
     AppCustomizeSetting
   >(initialState);
-  // const {toasts} =useToast;
   const [isUploading, setUploading] = useState(false);
   const { startUpload } = useUploadThing("media");
   const handleStatus = (status = "draft", clear = false) => {
@@ -89,7 +88,7 @@ const Page = ({ params }: PageProps) => {
   };
 
   const applyPresets = async () => {
-    const result = loadDash.cloneDeep(appCustomizeSetting);
+    const result: any = loadDash.cloneDeep(appCustomizeSetting);
     const presetSchema = presetFormSchema.filter(
       (schema) => schema.presetType === "" || schema.presetType === preset
     );
@@ -107,7 +106,7 @@ const Page = ({ params }: PageProps) => {
       switch (elementType) {
         case "ColorPicker":
           const value = document.documentElement.style.getPropertyValue(
-            cssVariable
+            cssVariable || ""
           );
           if (isNested) {
             result[parentKey][key] = value;
@@ -119,7 +118,9 @@ const Page = ({ params }: PageProps) => {
           let file =
             result[parentKey][key] ||
             result[key] ||
+            // @ts-ignore
             appCustomizeSetting[parentKey][key] ||
+            // @ts-ignore
             appCustomizeSetting[key];
           // console.log(file,result)
           const imgRes = await startUpload([file]);
@@ -177,8 +178,8 @@ const Page = ({ params }: PageProps) => {
             />
             <PresetSelector
               disabled={appCustomizeSetting.status === "draft"}
-              selectedPreset={preset}
-              setSelectedPreset={setPreset}
+              selectedPreset={appCustomizeSetting.presetType}
+              setSelectedPreset={handleCustomization}
             />
             {appCustomizeSetting?.status === "draft" && !isUploading ? (
               <AlertPopup
@@ -206,7 +207,7 @@ const Page = ({ params }: PageProps) => {
           {/* <MobileScreen/> */}
           {screenType === "mobile" ? (
             <MobileScreen>
-              {preset === "profile" ? (
+              {appCustomizeSetting.presetType === "profile" ? (
                 <Profile
                   customSetting={""}
                   postLikeIcon={""}
@@ -219,7 +220,7 @@ const Page = ({ params }: PageProps) => {
             </MobileScreen>
           ) : (
             <DesktopScreen>
-              {preset === "profile" ? (
+              {appCustomizeSetting.presetType === "profile" ? (
                 // @ts-ignore
                 <Profile {...appCustomizeSetting} />
               ) : (
@@ -231,7 +232,7 @@ const Page = ({ params }: PageProps) => {
         <div className="hidden flex-col col-span-1 min-w-[20rem] bg-gray-200 space-y-4 sm:flex md:order-2 h-full min-h-[40rem]  rounded p-2 ">
           <div className="">
             <CustomizeSetting
-              preset={preset}
+              preset={appCustomizeSetting.presetType}
               initial={appCustomizeSetting}
               handleStatus={handleStatus}
               handleCustomization={handleCustomization}

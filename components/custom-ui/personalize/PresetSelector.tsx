@@ -71,7 +71,15 @@ export function PresetSelector(props: any) {
               <CommandItem
                 key={index}
                 onSelect={() => {
-                  setSelectedPreset(preset.key);
+                  // setSelectedPreset(preset.key);
+                  setSelectedPreset({
+                    value:preset.key,
+                    key:"presetType",
+                  })
+                  setSelectedPreset({
+                    value:"pending",
+                    key:"status",
+                  })
                   setOpen(false);
                 }}
               >
