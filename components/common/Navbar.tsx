@@ -1,32 +1,72 @@
-"use client"
-import { SignedIn, SignOutButton, UserButton } from "@clerk/nextjs";
+"use client";
+
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { LucideIcon } from "lucide-react";
 
-// import { Icons } from './Icons'
+import { cn } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { buttonVariants } from "../ui/button";
 
-const Navbar = () => {
+interface NavProps {
+  isCollapsed: boolean;
+  links: {
+    title: string;
+    label?: string;
+    icon: LucideIcon;
+    route: string;
+    variant: "default" | "ghost";
+  }[];
+}
 
-  const pathname = usePathname();
-
-  // const { userId } = useAuth();
-  
+export function Nav({ links, isCollapsed }: NavProps) {
+  console.log(isCollapsed);
   return (
-    <div className="fixed top-0 inset-x-0 h-fit bg-zinc-100 border-b border-zinc-300 z-30 py-2 md:py-4 ">
-      <div className="container max-w-7xl h-full mx-auto flex items-center justify-between gap-2">
-        {/* logo */}
-       
-
-        {/* search bar */}
-        {/* <SearchBar /> */}
-
-        {/* actions */}
-        <SignedIn>
-          <UserButton/>
-        </SignedIn>
-      </div>
+    <div
+      data-collapsed={isCollapsed}
+      className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
+    >
+      <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+        {links.map((link, index) =>
+          isCollapsed ? (
+            <Tooltip key={index} delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Link
+                  href={link.route}
+                  className={cn(
+                    buttonVariants({ variant: link.variant, size: "icon" }),
+                    "h-9 w-9",
+                    link.variant === "default" &&
+                      "bg-transparent text-white hover:bg-gray-100 hover:text-black"
+                  )}
+                >
+                  <link.icon className="h-4 w-4 hover:text-black text-white" />
+                  <span className="sr-only">{link.title}</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent
+                side="right"
+                className="flex   :text-black items-center gap-4"
+              >
+                <p className=" ">{link.title}</p>
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <Link
+              key={index}
+              href={link.route}
+              className={cn(
+                buttonVariants({ variant: link.variant, size: "sm" }),
+                // link.variant === "default" &&
+                " text-white  hover:text-black",
+                "justify-start"
+              )}
+            >
+              <link.icon className="mr-2 h-4 w-4" />
+              <p className=" text-white  hover:text-black" >{link.title}</p>
+            </Link>
+          )
+        )}
+      </nav>
     </div>
   );
-};
-
-export default Navbar;
+}
