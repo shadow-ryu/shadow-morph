@@ -1,9 +1,19 @@
-import Image from 'next/image'
+import BottomNav from "@/components/common/BottomNav";
+import LeftSidebar from "@/components/common/LSideBar";
+import Dashboard from "@/components/custom-ui/Dashboard";
+import PreviewScreen from "@/components/custom-ui/personalize/PreviewScreen";
+import Image from "next/image";
+import { cookies } from "next/headers";
+const Home = () => {
+ 
 
-export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-     
+    <main className="h-screen w-full bg-dark-3">
+      <Dashboard
+        accounts={[]}
+        navCollapsedSize={3}
+      />
     </main>
-  )
-}
+  );
+};
+export default Home;

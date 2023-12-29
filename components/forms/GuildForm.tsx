@@ -32,8 +32,8 @@ const GuildForm = ({ guild }: any) => {
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const { userId } = useAuth();
-  if(!userId){
-    router.push(`/sign-in`)
+  if (!userId) {
+    router.push(`/sign-in`);
   }
   const { startUpload } = useUploadThing("media");
 
@@ -48,7 +48,9 @@ const GuildForm = ({ guild }: any) => {
       tags: guild?.tags || "",
     },
   });
-  const { formState: { errors }} = form
+  const {
+    formState: { errors },
+  } = form;
   const handleImage = (
     e: ChangeEvent<HTMLInputElement>,
     fieldChange: (value: string) => void
@@ -87,7 +89,6 @@ const GuildForm = ({ guild }: any) => {
 
   const onSubmit = async (values: z.infer<typeof GuildValidation>) => {
     const blob = values.guild_logo;
-    console.log("submited");
     const hasImageChanged = isBase64Image(blob);
     if (hasImageChanged) {
       const imgRes = await startUpload(files);
@@ -97,27 +98,32 @@ const GuildForm = ({ guild }: any) => {
         values.guild_logo = imgRes[0]?.url;
       }
     }
-    console.log(values)
+    console.log(values);
     console.log("fff");
-    const {name, info, tags, guild_logo, guild_handle, ownerID:owner_id}= values
-    const res = await BuildGuild(
-      {name, info, tags, guild_logo, guild_handle, owner_id}
-    );
+    const {
+      name,
+      info,
+      tags,
+      guild_logo,
+      guild_handle,
+      ownerID: owner_id,
+    } = values;
+    const res = await BuildGuild({
+      name,
+      info,
+      tags,
+      guild_logo,
+      guild_handle,
+      owner_id,
+    });
     console.log(res);
-    if(res){
-        // TODO: proper ssucees and fails modal or tost message handle
+    if (res) {
+      // TODO: proper ssucees and fails modal or tost message handle
     }
-
-    
   };
   return (
-    <div className="container flex items-center h-full max-w-3xl mx-auto">
-      <div className="relative bg-white w-full h-fit p-4 rounded-lg space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-xl font-semibold">Build a Guild House</h1>
-        </div>
-
-        <hr className="bg-gray-500 h-px" />
+    <div className="container flex items-center h-fit max-w-3xl mx-auto">
+      <div className="relative  text-white w-full h-fit p-4 rounded-lg space-y-6">
         <Form {...form}>
           <form
             className="flex flex-col justify-start gap-10"
@@ -127,7 +133,7 @@ const GuildForm = ({ guild }: any) => {
               control={form.control}
               name="guild_logo"
               render={({ field }) => (
-                <FormItem className="flex items-center gap-4">
+                <FormItem className="flex   items-center gap-4">
                   <FormLabel className="account-form_image-label">
                     {!!field.value ? (
                       <Image
@@ -148,12 +154,12 @@ const GuildForm = ({ guild }: any) => {
                       />
                     )}
                   </FormLabel>
-                  <FormControl className="flex-1 text-base-semibold text-gray-200">
+                  <FormControl className="flex-1 text-base-semibold  text-gray-200">
                     <Input
                       type="file"
                       accept="image/*"
                       placeholder="Add guild logo"
-                      className="account-form_image-input"
+                      className="account-form_image-input bg-[#f6faef]"
                       onChange={(e) => handleImage(e, field.onChange)}
                     />
                   </FormControl>
@@ -166,13 +172,13 @@ const GuildForm = ({ guild }: any) => {
               name="name"
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col gap-3">
-                  <FormLabel className="text-base-semibold text-dark-2">
+                  <FormLabel className="text-base-semibold  ">
                     Guild Name
                   </FormLabel>
                   <FormControl>
                     <Input
                       type="text"
-                      className="account-form_input no-focus"
+                      className="account-form_input no-focus bg-[#f6faef]"
                       {...field}
                     />
                   </FormControl>
@@ -186,13 +192,13 @@ const GuildForm = ({ guild }: any) => {
               name="guild_handle"
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col gap-3">
-                  <FormLabel className="text-base-semibold text-dark-2">
+                  <FormLabel className="text-base-semibold ">
                     Guild handle
                   </FormLabel>
                   <FormControl>
                     <Input
                       type="text"
-                      className="account-form_input no-focus"
+                      className="account-form_input no-focus bg-[#f6faef]"
                       {...field}
                     />
                   </FormControl>
@@ -206,13 +212,11 @@ const GuildForm = ({ guild }: any) => {
               name="info"
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col gap-3">
-                  <FormLabel className="text-base-semibold text-dark-2">
-                    info
-                  </FormLabel>
+                  <FormLabel className="text-base-semibold ">info</FormLabel>
                   <FormControl>
                     <Textarea
                       rows={10}
-                      className="account-form_input no-focus"
+                      className="account-form_input no-focus bg-[#f6faef] "
                       {...field}
                     />
                   </FormControl>
@@ -225,13 +229,13 @@ const GuildForm = ({ guild }: any) => {
               name="tags"
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col gap-3">
-                  <FormLabel className="text-base-semibold text-dark-2">
+                  <FormLabel className="text-base-semibold ">
                     Guild Tags
                   </FormLabel>
                   <FormControl>
                     <Input
                       type="text"
-                      className="account-form_input no-focus"
+                      className="bg-[#f6faef] account-form_input no-focus"
                       {...field}
                     />
                   </FormControl>
@@ -239,8 +243,8 @@ const GuildForm = ({ guild }: any) => {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="bg-primary-500" >
-              {"dubmit"}
+            <Button type="submit" className="bg-[#AA4B86] hover:bg-[#b13581]">
+              build
             </Button>
           </form>
         </Form>

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { currentUser } from "@clerk/nextjs";
 import { headers } from "next/headers";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,29 +9,32 @@ import { usePathname, useRouter } from "next/navigation";
 // import { fetchUsers } from "@/lib/actions/user.actions";
 
 function RightSidebar() {
-//   const user = await currentUser();
-//   if (!user) return null;
+  //   const user = await currentUser();
+  //   if (!user) return null;
 
-//   const similarMinds = await fetchUsers({
-//     userId: user.id,
-//     pageSize: 4,
-//   });
+  //   const similarMinds = await fetchUsers({
+  //     userId: user.id,
+  //     pageSize: 4,
+  //   });
 
-//   const suggestedCOmmunities = await fetchCommunities({ pageSize: 4 });
-const router = useRouter();
-const pathname = usePathname();
-console.log(pathname);
-if(['/post/create'].includes(pathname) ){
-  return null
-}
+  //   const suggestedCOmmunities = await fetchCommunities({ pageSize: 4 });
+  const router = useRouter();
+  const pathname = usePathname();
+  const dynamicRoutePattern = /^\/guilds\/\d+\/personailzer$/;
+  if (
+    ["/post/create", "/customize"].includes(pathname) ||
+    dynamicRoutePattern.test(pathname)
+  ) {
+    return <></>;
+  }
   return (
- <section className='custom-scrollbar rightsidebar'>
-      <div className='flex flex-1 flex-col justify-start'>
-        <h3 className='text-heading4-medium text-light-1'>
+    <section className="custom-scrollbar rightsidebar min-w-[25rem]">
+      <div className="flex flex-1 flex-col justify-start">
+        <h3 className="text-heading4-medium text-light-1">
           Suggested Communities
         </h3>
 
-        <div className='mt-7 flex w-[350px] flex-col gap-9'>
+        <div className="mt-7 flex w-[350px] flex-col gap-9">
           {/* {suggestedCOmmunities.communities.length > 0 ? (
             <>
               {suggestedCOmmunities.communities.map((community) => (
@@ -46,16 +49,14 @@ if(['/post/create'].includes(pathname) ){
               ))}
             </>
           ) : ( */}
-            <p className='!text-base-regular text-light-3'>
-              No communities yet
-            </p>
+          <p className="!text-base-regular text-light-3">No communities yet</p>
           {/* )} */}
         </div>
       </div>
 
-      <div className='flex flex-1 flex-col justify-start'>
-        <h3 className='text-heading4-medium text-light-1'>Similar Minds</h3>
-        <div className='mt-7 flex w-[350px] flex-col gap-10'>
+      <div className="flex flex-1 flex-col justify-start">
+        <h3 className="text-heading4-medium text-light-1">Similar Minds</h3>
+        <div className="mt-7 flex w-[350px] flex-col gap-10">
           {/* {similarMinds.users.length > 0 ? (
             <>
               {similarMinds.users.map((person) => (
@@ -70,7 +71,7 @@ if(['/post/create'].includes(pathname) ){
               ))}
             </>
           ) : ( */}
-            <p className='!text-base-regular text-light-3'>No users yet</p>
+          <p className="!text-base-regular text-light-3">No users yet</p>
           {/* )} */}
         </div>
       </div>

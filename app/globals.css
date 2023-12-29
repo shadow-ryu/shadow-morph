@@ -33,6 +33,15 @@
     --ring: 222.2 84% 4.9%;
  
     --radius: 0.5rem;
+    --gradient-background-color: linear-gradient(to right, #ff6b6b, #6b47ff);
+    --gradient-banner-background-color: linear-gradient(to right, #ff6b6b, #6b47ff);
+    --text-color: #000; 
+    --header-color: #000;
+    --post-header-color: #000;
+    --post-text-color: #000;
+    --gradient-post-background-color: linear-gradient(to right, #ff6b6b, #6b47ff);
+
+
   }
  
   .dark {
@@ -70,11 +79,11 @@
 @layer components {
   /* main */
   .main-container {
-    @apply flex min-h-screen flex-1 flex-col items-center  px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+    @apply   min-h-screen  min-w-full;
   }
 
   .bottombar {
-    @apply fixed bottom-0 z-10 w-full rounded-t-3xl bg-glassmorphism p-4 backdrop-blur-lg xs:px-7 md:hidden;
+    @apply  w-full rounded-t-3xl bg-glassmorphism p-4 backdrop-blur-lg xs:px-7 md:hidden;
   }
 
   .bottombar_container {
@@ -86,7 +95,7 @@
   }
 
   .leftsidebar {
-    @apply sticky left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r border-r-dark-4 bg-dark-2 pb-5 pt-28 max-md:hidden;
+    @apply flex h-screen w-fit flex-col justify-between overflow-auto border-r border-r-slate-200 bg-gray-900 max-md:hidden;
   }
 
   .leftsidebar_link {
@@ -94,8 +103,18 @@
   }
 
   .rightsidebar {
-    @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-l border-l-dark-4 bg-dark-2 px-10 pb-6 pt-28 max-xl:hidden;
+    @apply  flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-l border-l-slate-400 bg-gray-900 px-10 pb-6 pt-28 max-xl:hidden;
   }
 
 
 }
+
+.mobile-screen {
+  width: 320px; /* Adjust the width for a mobile screen */
+  height: 568px; /* Adjust the height for a mobile screen */
+  border: 1px solid #000;
+  overflow: hidden;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+
