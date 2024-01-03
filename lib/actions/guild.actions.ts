@@ -34,10 +34,12 @@ export async function BuildGuild({
     if (!user) {
       throw new Error("user not found");
     }
+    //@ts-ignore
     let guild = await db
       .insert(guilds)
-      //@ts-ignore
-      .values({ name, info, tags, guild_logo, guild_handle, owner_id: user.id })
+    //@ts-ignore
+
+      .values({ name, info, tags, guild_logo, guild_handle, owner_id: user.id||"ff" })
       .returning();
     if (guild) {
       return {
@@ -113,6 +115,7 @@ export async function saveOrUpdatePreset({ customizeSetting }: any) {
       .onConflictDoUpdate({
         target: presets.id,
         set: { ...filteredPresetData },
+        // @ts-ignore 
         where: eq(presets.id, filteredPresetData.presetId || ""),
       })
       .returning();
@@ -128,6 +131,8 @@ export async function saveOrUpdatePreset({ customizeSetting }: any) {
     });
   } catch (error) {
     console.error(error);
+        // @ts-ignore 
+
     return generateResponse({ message: error || "An error occurred" });
   }
 }

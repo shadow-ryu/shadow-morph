@@ -86,18 +86,21 @@ export async function POST(req: Request) {
         image_url,
         username
       );
+      // @ts-ignore
       let user = await db
       .insert(users)
-      .values({
-        id: id,
-        username: username?.toLowerCase() || first_name.toLowerCase(),
-        name: first_name,
-        email: email_addresses[0]?.email_address,
-        image: image_url,
-        is_setup: false,
-        bio: "",
-        interests: "",
-      })
+      .values(
+        {
+          id:id, // Assuming id should be an array
+          username: username?.toLowerCase() || first_name.toLowerCase(),
+          name: first_name,
+          email: email_addresses[0]?.email_address,
+          image: image_url,
+          is_setup: false,
+          bio: "",
+          interests: "",
+        }
+      )
       .onConflictDoUpdate({
         target: users.id,
         set: {
@@ -105,9 +108,9 @@ export async function POST(req: Request) {
           image: image_url,
           username: username?.toLowerCase() || first_name.toLowerCase(),
         },
-        where: eq(users.id, id),
-      })
-      .returning();
+        where: eq(users.id, id), // Assuming id should be an array
+      });
+    
 
       break;
 

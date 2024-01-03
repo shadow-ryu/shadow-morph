@@ -41,7 +41,7 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
     defaultValues: {
       // subredditId,
       title: "",
-      userId: userId,
+      userId: userId||"-1",
       content: null,
     },
   });

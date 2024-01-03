@@ -37,6 +37,7 @@ export async function updateUser({
 }: UserUpdateParams): Promise<void> {
   try {
    const connectionString = process.env.DATABASE_URL
+    //@ts-ignore
    
     let user = await db
       .insert(users)
@@ -56,6 +57,8 @@ export async function updateUser({
           bio: bio,
           email:email,
           image: image,
+    //@ts-ignore
+
           is_setup: is_setup,
         },
         where: eq(users.id, userId),

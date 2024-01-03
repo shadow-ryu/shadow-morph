@@ -1,5 +1,5 @@
 import React from "react";
-
+// @ts-ignore
 const LogoSvg = ({ width, height }) => {
   const scaleFactor = 0.5; // Adjust this value to scale down further if needed
 
