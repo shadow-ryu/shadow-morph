@@ -1,8 +1,7 @@
 "use client"
 import Link from "next/link";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { cn, formatDateString } from "@/lib/utils";
-import { Badge } from "../ui/badge";
+import { cn } from "@/lib/utils";
 import { useRef } from "react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
