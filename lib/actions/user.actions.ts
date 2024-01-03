@@ -1,12 +1,7 @@
 "use server";
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from "postgres";
-
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { InferInsertModel, eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-
 export async function fetchUsers(userId: string) {
   try {
     const user = await db.select().from(users).where(eq(users.id, userId));
@@ -16,63 +11,39 @@ export async function fetchUsers(userId: string) {
   }
 }
 interface UserUpdateParams {
-  userId: string;
+  id: string;
   username: string;
   name: string;
   bio: string;
   image: string;
-  email:string;
-  path: string;
-  is_setup?:false;
+  email: string;
+  isSetup?: boolean;
 }
 
-export async function updateUser({
-  userId,
-  bio,email,
-  name,
-  path,
-  username,
-  image,
-  is_setup,
-}: UserUpdateParams): Promise<void> {
+export async function updateUser(user: UserUpdateParams): Promise<void> {
   try {
-   const connectionString = process.env.DATABASE_URL
-    //@ts-ignore
-   
-    let user = await db
-      .insert(users)
-      .values({
-        id: userId,
-        username: username.toLowerCase(),
-        name: name,
-        email:email,
-        bio: bio,
-        image: image,
-        is_setup: is_setup,
-      })
-      .onConflictDoUpdate({
-        target: users.id,
-        set: {
-          username: username.toLowerCase(),
-          bio: bio,
-          email:email,
-          image: image,
+    const connectionString = process.env.DATABASE_URL;
     //@ts-ignore
 
-          is_setup: is_setup,
-        },
-        where: eq(users.id, userId),
+    // let userD = await createUser(user)
+    let userD = await db
+      .insert(users)
+      .values(user)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: user,
+        where: eq(users.id, user.id),
       })
       .returning();
 
-    console.log(user);
-    if (user) {
-      if (path === "/profile/edit") {
-        revalidatePath(path);
-      }
-    } else {
-      throw new Error(`User not found for ID: ${userId}`);
-    }
+    console.log(userD,"gggg");
+    // if (userD) {
+    //   // if (path === "/profile/edit") {
+    //   //   revalidatePath(path);
+    //   // }
+    // } else {
+    //   throw new Error(`User not found for ID: ${userId}`);
+    // }
   } catch (error:any) {
     console.log(`Failed to create/update user: ${error.message}`);
   }

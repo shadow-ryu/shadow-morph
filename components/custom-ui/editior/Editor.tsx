@@ -1,7 +1,7 @@
 "use client";
 import EditorJS from "@editorjs/editorjs";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
@@ -18,14 +18,18 @@ import { uploadFiles, useUploadThing } from "@/lib/uploadthing";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@clerk/nextjs";
 import { createPost } from "@/lib/actions/post.actions";
+import { navigate } from "@/lib/actions/common.action";
 
 type FormData = z.infer<typeof PostValidator>;
 
 interface EditorProps {
-  subredditId?: string;
+  guildId?: string;
+  isGuild?:boolean,
+  postId?:string;
+
 }
 
-export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
+export const Editor: React.FC<EditorProps> = ({postId, guildId,isGuild=false }) => {
   const ref = useRef<EditorJS>();
   const _titleRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
@@ -181,8 +185,19 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
       title: data.title,
       content: blocks,
       userId: userId,
+      isGuild:isGuild,
+      postId,
+      guildId:guildId
     };
-    await createPost(payload);
+     const result:any =await createPost(payload);
+     if(result&&[200,201].includes(result.status||404)){
+      toast({
+        title: "Post Created",
+        description:" post was successfully" ,
+        variant: "success",
+      });
+      navigate(`/posts/${result.data.id}`)
+     }
   }
 
   if (!isMounted) {

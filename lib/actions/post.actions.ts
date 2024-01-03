@@ -3,34 +3,73 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
 import { db } from "@/lib/db";
-import { posts } from "@/lib/db/schema";
+import { posts, users } from "@/lib/db/schema";
 import { InferInsertModel, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { generateResponse } from "../utils";
 
 interface CreatePostParams {
   userId: string;
   title: string;
+  postId?: string;
   content: any;
-  guild_id?: string;
+  isGuild: boolean;
+  guildId?: string;
 }
 export async function createPost({
   userId,
   title,
   content,
-  guild_id,
+  isGuild,
+  postId,
+  guildId,
 }: CreatePostParams) {
-    try {
-      // TODO: make logic to extract data of hastags or metions from content
-  let post = await db.insert(posts).values({
-    user_id: userId,
-    title: title,
-    content: content,
-    // guild_id: guild_id,
-  }).returning();
-  if(post){
-    return(post)
-  }
-    }catch(er:any){
-        console.log(`Failed to create/update user: ${er.message}`);
+  try {
+    // TODO: make logic to extract data of hastags or metions from content
+    // let post = await db.insert(posts).values({
+    //   user_id: userId,
+    //   title: title,
+    //   content: content,
+    //   // guild_id: guild_id,
+    // }).returning();
+    const [user] = await db.select().from(users).where(eq(users.id, userId));
+
+  
+    console.log("object", user);
+    if (!user) {
+      return { success: false };
     }
+    let data: any = {
+      authorId: userId,
+      title: title,
+      content: content,
+      isGuild: isGuild,
+      guildId,
+      postId:postId||-1
+      // guild_id: guild_id,
+    };
+    console.log(data,"data");
+    let [post] = await db
+      .insert(posts)
+      .values(data)
+      // .onConflictDoUpdate({
+      //   target: posts.id,
+      //   set: data,
+      //   where: eq(posts.id, postId),
+      // })
+      .returning();
+
+    if (post) {
+
+      return generateResponse({
+        status: postId?200:201,
+        message:`${postId? 'updated':'created'} successfully` ,
+        data:post
+      });
+    }
+  } catch (error) {
+    let message
+    if (error instanceof Error) message = error.message
+    console.log(`Failed to create/update user: ${message}`);
+  }
 }

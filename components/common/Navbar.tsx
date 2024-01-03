@@ -19,7 +19,6 @@ interface NavProps {
 }
 
 export function Nav({ links, isCollapsed }: NavProps) {
-  console.log(isCollapsed);
   return (
     <div
       data-collapsed={isCollapsed}
@@ -31,21 +30,21 @@ export function Nav({ links, isCollapsed }: NavProps) {
             <Tooltip key={index} delayDuration={0}>
               <TooltipTrigger asChild>
                 <Link
-                  href={link.route}
+                  href="#"
                   className={cn(
                     buttonVariants({ variant: link.variant, size: "icon" }),
                     "h-9 w-9",
-                    link.variant === "default" &&
-                      "bg-transparent text-white hover:bg-gray-100 hover:text-black"
+                    // link.variant === "default" &&
+                    "text-muted-foreground hover:bg-gray-500 hover:text-white"
                   )}
                 >
-                  <link.icon className="h-4 w-4 hover:text-black text-white" />
+                  <link.icon className="h-4 w-4 " />
                   <span className="sr-only">{link.title}</span>
                 </Link>
               </TooltipTrigger>
               <TooltipContent
                 side="right"
-                className="flex   :text-black items-center gap-4"
+                className="flex   text-black items-center gap-4"
               >
                 <p className=" ">{link.title}</p>
               </TooltipContent>
@@ -57,16 +56,17 @@ export function Nav({ links, isCollapsed }: NavProps) {
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
                 // link.variant === "default" &&
-                " text-white  hover:text-black",
+                "text-muted-foreground hover:bg-gray-500 hover:text-white",
                 "justify-start"
               )}
             >
               <link.icon className="mr-2 h-4 w-4" />
-              <p className=" text-white  hover:text-black" >{link.title}</p>
+              <p className=" text-white  hover:text-black">{link.title}</p>
             </Link>
           )
         )}
       </nav>
+
     </div>
   );
 }

@@ -18,6 +18,7 @@ import ScreenPreviewSelector from "./ScreenPreviewSelector";
 import DesktopScreen from "./screens/DesktopScreen";
 import MobileScreen from "./screens/MobileScreen";
 import { Progress } from "@/components/ui/progress";
+import { CloudFog } from "lucide-react";
 const initialState: AppCustomizeSetting = {
   status: "pending",
   presetType: "profile",
@@ -34,7 +35,7 @@ const CustomizingEditor = ({
   pageType,
   userId,
 }: {
-  dbData?: Array<AppCustomizeSetting> |any;
+  dbData?: Array<AppCustomizeSetting> | any;
   slug: string;
   pageType: string;
   userId: string;
@@ -44,7 +45,7 @@ const CustomizingEditor = ({
   const [appCustomizeSetting, setAppCustomizeSetting] = useState<
     AppCustomizeSetting
   >(initialState);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const [isUploading, setUploading] = useState(false);
@@ -65,9 +66,13 @@ const CustomizingEditor = ({
     data: Array<AppCustomizeSetting>;
   }) => {
     initialState["presetType"] = preset;
-    let initialValue: AppCustomizeSetting =
-      data.find((res) => res.presetType === preset) || initialState;
-    console.log(initialValue, "initialState");
+    let initialValue: AppCustomizeSetting;
+
+    initialValue =
+      data && data.length > 1
+        ? data.find((res) => res.presetType === preset) || initialState
+        : initialState;
+    console.log(data && data.length > 1, "initialsState", initialValue);
 
     setProgress(100);
     setAppCustomizeSetting(initialValue);
@@ -82,7 +87,6 @@ const CustomizingEditor = ({
     destroy = false,
   }: any) => {
     let newValue = destroy ? undefined : value;
-    console.log(value, "vv");
     if (isNested) {
       setAppCustomizeSetting((prevPersonalization) => ({
         ...prevPersonalization,
@@ -99,6 +103,7 @@ const CustomizingEditor = ({
         [key]: newValue,
       }));
     }
+
     if ((key = "presetType")) {
       console.log(appCustomizeSetting);
 
@@ -181,7 +186,7 @@ const CustomizingEditor = ({
     result["ownerId"] = "";
     result["guildId"] = "";
     // available
-    console.log(result);
+    console.log(result,"fff");
     handleStatus("saved", true);
     setUploading(false);
     toast({
@@ -195,10 +200,10 @@ const CustomizingEditor = ({
     handleOnDiscard();
   };
   useEffect(() => {
-    fetchCustomizationDataDb({
-      preset: appCustomizeSetting.presetType,
-      data: dbData,
-    });
+    // fetchCustomizationDataDb({
+    //   preset: appCustomizeSetting.presetType,
+    //   data: dbData,
+    // });
     // console.log(count);
     // let count =progress
 

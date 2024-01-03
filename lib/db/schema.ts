@@ -11,6 +11,7 @@ import {
   integer,
   pgEnum,
 } from "drizzle-orm/pg-core";
+import { nullable } from "zod";
 
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().notNull(),
@@ -25,19 +26,19 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updatedAt", { mode: "string" }).defaultNow(),
 });
 export const userRelations = relations(users, ({ one, many }) => ({
-  posts: many(posts),
+  posts: many(posts,{ relationName: 'authorId'}),  
   guilds:many(guilds)
 }));
 export const posts:any = pgTable("posts", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 256 }),
   authorId: varchar("authorId").references(() => users.id),
-  guildId: integer("guildId").references(() => guilds.id),
+  guildId: integer("guildId"),
+  isGuild: boolean("isGuild").default(false),
   content: json("content"),
   createdAt: timestamp("createdAt", { mode: "string" }).defaultNow(),
   updatedAt: timestamp("updatedAt", { mode: "string" }).defaultNow(),
   parentId: integer("parentId")
-    .references(() => posts.id)
 });
 
 export const postRelations = relations(posts, ({ one, many }) => ({

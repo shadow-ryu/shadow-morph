@@ -93,7 +93,7 @@ const GuildForm = ({ guild }: any) => {
     const hasImageChanged = isBase64Image(blob);
     if (hasImageChanged) {
       const imgRes = await startUpload(files);
-      console.log(imgRes, "dddd");
+      // console.log(imgRes, "dddd");
       console.log(imgRes);
       if (imgRes && imgRes[0].url) {
         values.guild_logo = imgRes[0]?.url;

@@ -11,7 +11,6 @@ async function Page() {
   const user = await currentUser();
   if (!user) return null; // to avoid typescript warnings
   const userInfo:any = await fetchUsers(user.id);
-console.log(user)
   if (userInfo?.onboarded) redirect("/");
 
   
@@ -24,8 +23,6 @@ console.log(user)
     bio:  userInfo?.bio ||"",
     image:  userInfo?.image || user.imageUrl,
   };
-console.log(userData);
-console.log( user.username);
   return (
     <main className='mx-auto flex max-w-3xl flex-col justify-start px-10 '>
       <h1 className='head-text'>Onboarding</h1>
