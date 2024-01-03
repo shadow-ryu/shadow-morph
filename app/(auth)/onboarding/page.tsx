@@ -10,8 +10,9 @@ import { redirect } from "next/navigation";
 async function Page() {
   const user = await currentUser();
   if (!user) return null; // to avoid typescript warnings
-  const userInfo:any = await fetchUsers(user.id);
-  if (userInfo?.onboarded) redirect("/");
+  const [userInfo]:any = await fetchUsers(user.id);
+  console.log(userInfo);
+  if (userInfo?.isSetup) redirect("/");
 
   
   const userData = {
