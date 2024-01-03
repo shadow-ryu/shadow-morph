@@ -1,6 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+
 import { useCustomToasts } from "@/hooks/use-custom-toast";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -27,6 +26,8 @@ import Image from "next/image";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@clerk/nextjs";
 import { BuildGuild } from "@/lib/actions/guild.actions";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 const GuildForm = ({ guild }: any) => {
   const { loginToast } = useCustomToasts();
   const router = useRouter();
