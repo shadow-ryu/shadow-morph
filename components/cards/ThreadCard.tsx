@@ -292,6 +292,8 @@ function ThreadCard({
                     "text-muted-foreground"
                   )}
                 >
+                  {/* @ts-ignore */}
+
                   {formatDistanceToNow(new Date(item.date), {
                     addSuffix: true,
                   })}
