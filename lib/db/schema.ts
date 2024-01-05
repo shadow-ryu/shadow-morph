@@ -25,10 +25,7 @@ export const users = pgTable("users", {
   createdAt: timestamp("createdAt", { mode: "string" }).defaultNow(),
   updatedAt: timestamp("updatedAt", { mode: "string" }).defaultNow(),
 });
-export const userRelations = relations(users, ({ one, many }) => ({
-  posts: many(posts,{ relationName: 'authorId'}),  
-  guilds:many(guilds)
-}));
+
 export const posts:any = pgTable("posts", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 256 }),
@@ -36,10 +33,11 @@ export const posts:any = pgTable("posts", {
   guildId: integer("guildId"),
   isGuild: boolean("isGuild").default(false),
   content: json("content"),
-  createdAt: timestamp("createdAt", { mode: "string" }).defaultNow(),
-  updatedAt: timestamp("updatedAt", { mode: "string" }).defaultNow(),
+  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
+  updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow(),
   parentId: integer("parentId")
 });
+
 
 export const postRelations = relations(posts, ({ one, many }) => ({
   author: one(users, {
