@@ -46,12 +46,12 @@ import { buttonVariants } from "@/components/ui/button";
 import { index } from "drizzle-orm/mysql-core";
 import link from "next/link";
 
-interface MailProps {
+interface Props {
   //   mails: Mail[]
   noOFSections: number[];
   children: React.ReactNode;
   navCollapsedSize: number;
-  thirdSection: React.ReactNode;
+  thirdSection?: React.ReactNode;
 }
 
 export default function Dashboard({
@@ -59,7 +59,7 @@ export default function Dashboard({
   navCollapsedSize,
   noOFSections = [10, 60, 20],
   thirdSection = null,
-}: MailProps) {
+}: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [defaultLayout, setDefaultLayout] = useState(noOFSections);
   //   const [mail] = useMail()
