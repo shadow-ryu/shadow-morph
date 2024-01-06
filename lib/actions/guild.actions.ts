@@ -74,30 +74,30 @@ interface BuildPresetParams {
 // Import your database module
 
 export async function saveOrUpdatePreset({ customizeSetting }: any) {
-  // console.log(profile);
+  console.log("profile");
   try {
     // Assuming you have a way to get the user by owner_id
-    const user = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, customizeSetting.owner_id));
+    // const user = await db
+    //   .select()
+    //   .from(users)
+    //   .where(eq(users.id, customizeSetting.owner_id));
     // const user = { id: "user_2XRjBc1msivqXqPTydMGKJamWqX" };
-    if (!user) {
-      return generateResponse({
-        message: "User not found",
-      });
-    }
-    if (customizeSetting.pageType === "guild") {
-      const guild = await db
-        .select()
-        .from(guilds)
-        .where(eq(guilds.id, customizeSetting.guildId));
-      if (!guild) {
-        return generateResponse({
-          message: "Guild not found",
-        });
-      }
-    }
+    // if (!user) {
+    //   return generateResponse({
+    //     message: "User not found",
+    //   });
+    // }
+    // if (customizeSetting.pageType === "guild") {
+    //   const guild = await db
+    //     .select()
+    //     .from(guilds)
+    //     .where(eq(guilds.id, customizeSetting.guildId));
+    //   if (!guild) {
+    //     return generateResponse({
+    //       message: "Guild not found",
+    //     });
+    //   }
+    // }
 
     // Filter out undefined or null values from presetData
     const filteredPresetData = Object.fromEntries(
@@ -105,30 +105,32 @@ export async function saveOrUpdatePreset({ customizeSetting }: any) {
         ([_, value]) => value !== undefined && value !== null
       )
     );
+    console.log("first",filteredPresetData)
 
-    // Use a single query to insert and return the result
-    if (filteredPresetData.presetId) {
-    }
+    // // Use a single query to insert and return the result
+    // if (filteredPresetData.presetId) {
+    // }
     const [preset] = await db
       .insert(presets)
       .values(filteredPresetData)
-      .onConflictDoUpdate({
-        target: presets.id,
-        set: { ...filteredPresetData },
-        // @ts-ignore 
-        where: eq(presets.id, filteredPresetData.presetId || ""),
-      })
+      // .onConflictDoUpdate({
+      //   target: presets.id,
+      //   set: { ...filteredPresetData },
+      //   // @ts-ignore 
+      //   where: eq(presets.id, filteredPresetData.presetId || ""),
+      // })
       .returning();
 
-    console.log(preset, "preset");
+    // console.log(preset, "preset");
+    // console.log(customizeSetting,"handleOnSave")
 
-    return generateResponse({
-      data: preset,
-      status: 200,
-      err: false,
-      message: "Created",
-      success: true,
-    });
+    // return generateResponse({
+    //   data: preset,
+    //   status: 200,
+    //   err: false,
+    //   message: "Created",
+    //   success: true,
+    // });
   } catch (error) {
     console.error(error);
         // @ts-ignore 

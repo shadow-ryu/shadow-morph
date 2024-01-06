@@ -124,7 +124,7 @@ const GuildForm = ({ guild }: any) => {
   };
   return (
     <div className="container flex items-center h-fit max-w-3xl mx-auto">
-      <div className="relative  text-white w-full h-fit p-4 rounded-lg space-y-6">
+      <div className="relative  w-full h-fit p-4 rounded-lg space-y-6">
         <Form {...form}>
           <form
             className="flex flex-col justify-start gap-10"

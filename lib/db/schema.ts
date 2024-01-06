@@ -77,7 +77,6 @@ export const presets = pgTable("presets", {
   pageType: varchar("pageType"),
   ownerId: varchar("ownerId").references(() => users.id),
   guildId: integer("guildId").references(() => guilds.id),
-  pageBorder:  varchar("pageBorder"),
   backgroundColor: varchar("backgroundColor"),
   textColor:  varchar("textColor"),
   userTitleColor: varchar("userTitleColor"),

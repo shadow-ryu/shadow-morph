@@ -18,12 +18,14 @@ const Page = async ({ params }: PageProps) => {
   const user = await currentUser();
   if (!user) return redirect("/");
 
-  // const userInfo = await fetchUsers(user.id);
+  let  userInfo = await fetchUsers(user.id);
+  // userInfo=userInfo[0];
+  // console.log([0],slug,"slug")
   // if (!userInfo?.onboarded) redirect("/onboarding");
   // const guild = await db.select().from(guilds).where(eq(guilds.id, slug));
   // if (guild) {
   // }
-  // console.log(subreddit,"fff");
+  console.log(userInfo,"fff");
   const data: any = [];
   return (
     <div className="  h-full w-full">

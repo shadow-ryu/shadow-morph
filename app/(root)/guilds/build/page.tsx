@@ -1,15 +1,18 @@
+import Dashboard from "@/components/custom-ui/dashboard/Dashboard";
 import GuildForm from "@/components/forms/GuildForm";
 
 const Page = async () => {
   return (
-    <div className="h-full w-full bg-[#17394f] flex-col justify-center items-center">
-      <div className="flex text-center justify-between items-center my-1">
-        <h1 className="text-xl font-bold text-gray-200 ml-[15%]">
+   <Dashboard noOFSections={[20,80]}  navCollapsedSize={2} >
+     <div className="h-full w-full flex-col justify-center items-center">
+      <div className="">
+        <h1 className="text-xl font-bold text-gray-200 ">
           Build a Guild House
         </h1>
       </div>
       <GuildForm />
     </div>
+   </Dashboard>
   );
 };
 export default Page;

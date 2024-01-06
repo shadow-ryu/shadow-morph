@@ -19,6 +19,7 @@ import DesktopScreen from "./screens/DesktopScreen";
 import MobileScreen from "./screens/MobileScreen";
 import { Progress } from "@/components/ui/progress";
 import { CloudFog } from "lucide-react";
+import { saveOrUpdatePreset } from "@/lib/actions/guild.actions";
 const initialState: AppCustomizeSetting = {
   status: "pending",
   presetType: "profile",
@@ -176,12 +177,16 @@ const CustomizingEditor = ({
   const handleOnSave = async () => {
     setUploading(true);
     const result = await applyPresets();
-    // const data = await saveOrUpdatePreset({
-    //   guild_id: params.slug,
-    //   type: "guild",
-    //   // id,
-    //   customizeSetting: result,
-    // });
+    console.log("result",result)
+    const data = await saveOrUpdatePreset({
+      guild_id: slug,
+      type: "guild",
+      // id,
+      owner_id:userId,
+      customizeSetting: result,
+    });
+    console.log("data",data)
+
     result["pageType"] = "guild";
     result["ownerId"] = "";
     result["guildId"] = "";
