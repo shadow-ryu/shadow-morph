@@ -14,7 +14,6 @@ import {
   User,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
-import ThreadsTab from "@/components/common/ThreadsTab";
 import { communityTabs } from "@/lib/constants";
 import { generateLocalURl } from "@/lib/utils";
 

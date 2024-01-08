@@ -1,5 +1,5 @@
 "use client";
-
+import Logo from "../../../public/logo.svg";
 import {
   ActivitySquare,
   AlertCircle,
@@ -45,6 +45,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { buttonVariants } from "@/components/ui/button";
 import { index } from "drizzle-orm/mysql-core";
 import link from "next/link";
+import Image from "next/image";
 
 interface Props {
   //   mails: Mail[]
@@ -85,7 +86,6 @@ export default function Dashboard({
             minSize={10}
             maxSize={15}
             onResize={(e) => {
-              console.log(Math.floor(e), "eeeee");
               let collapsed = Math.floor(e) <= 10;
               setIsCollapsed(collapsed);
             }}
@@ -106,9 +106,15 @@ export default function Dashboard({
                 className="flex gap-2 min-h-4 w-full text-center p-2   justify-center  items-center order-first"
               >
                 {/* <Icons.logo className='h-8 w-8 sm:h-6 sm:w-6' /> */}
-                <LogoSvg
+                {/* <LogoSvg
                   height={isCollapsed ? 25 : 35}
                   width={isCollapsed ? 25 : 35}
+                /> */}
+                <Image
+                  src={Logo}
+                  alt="logo"
+                  height={isCollapsed ? 35 : 50}
+                  width={isCollapsed ? 35 : 50}
                 />
                 {!isCollapsed ? (
                   <h4 className="hidden text-white  text-md text-heading3-semibold md:block">

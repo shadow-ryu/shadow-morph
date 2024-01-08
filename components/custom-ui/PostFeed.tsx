@@ -50,7 +50,7 @@ const PostFeed = ({ subredditName, initialPosts }: PostFeeedProps) => {
         return (
           // @ts-ignore
           <div className="" key={post.id}>
-            <ThreadCard post={post} />
+            {/* <ThreadCard post={post} /> */}
           </div>
           // <div key={post.id} className="text-white h-18 border-red-700 bg-gray-600" ref={ref}>{JSON.stringify(post)}</div>
         );

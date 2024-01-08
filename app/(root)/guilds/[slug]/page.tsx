@@ -17,7 +17,6 @@ import { UserAvatar } from "@/components/custom-ui/UserAvatar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { communityTabs } from "@/lib/constants";
-import ThreadsTab from "@/components/common/ThreadsTab";
 // import SubscribeLeaveToggle from "@/components/custom-ui/SubscribeLeaveToggle";
 import { currentUser, useAuth } from "@clerk/nextjs";
 interface PageProps {
@@ -172,11 +171,7 @@ const Page = async ({ params }: PageProps) => {
 
             <TabsContent value="posts" className="w-full text-light-1">
               {/* @ts-ignore */}
-              <ThreadsTab
-                currentUserId={"888888"}
-                accountId={"0000"}
-                accountType="Community"
-              />
+
             </TabsContent>
 
             <TabsContent value="requests" className="w-full text-light-1">
