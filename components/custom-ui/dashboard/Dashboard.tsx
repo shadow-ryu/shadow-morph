@@ -1,5 +1,5 @@
 "use client";
-import Logo from "../../../public/logo.svg";
+import Logo from "@/public/pac-logo.png";
 import {
   ActivitySquare,
   AlertCircle,
@@ -20,8 +20,7 @@ import {
 } from "lucide-react";
 import { Separator } from "../../ui/separator";
 import { Nav } from "../../common/Navbar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import { Input } from "../../ui/input";
+
 import {
   Tooltip,
   TooltipContent,
@@ -37,15 +36,13 @@ import {
 } from "../../ui/resizable";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { Panel } from "react-resizable-panels";
-import LogoSvg from "../../LogoSvg";
+
 import Link from "next/link";
-// import ThreadCard from "@/components/cards/ThreadCard";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { buttonVariants } from "@/components/ui/button";
-import { index } from "drizzle-orm/mysql-core";
-import link from "next/link";
+
 import Image from "next/image";
+import { UserNav } from "@/components/common/UserNav";
+import SearchBar from "@/components/common/SearchBar";
+
 
 interface Props {
   //   mails: Mail[]
@@ -66,19 +63,45 @@ export default function Dashboard({
   //   const [mail] = useMail()
 
   return (
-    <div className="min-h-screen h-full w-full">
-      <TooltipProvider delayDuration={0}>
-        <ResizablePanelGroup
-          direction="horizontal"
-          onLayout={(sizes: number[]) => {
-            //   document.cookie = `react-resizable-panels:layout=${JSON.stringify(
-            //     sizes
-            //   )}`;
-            console.log(sizes);
-            setDefaultLayout(sizes);
-          }}
-          className="h-full max-h-[800px] min-h-screen  w-full items-stretch"
+    <div className=" h-full w-full">
+      <div className="h-[3.5rem] w-full flex item-center self-center   justify-between rounded-none border-b  ">
+        <Link
+          href="/"
+          className="flex gap-1  w-[11.5rem] h-[3rem] text-center px-2 mt-1   justify-start  items-center order-first bg-slate-400 rounded-xl "
         >
+          <Image src={Logo} alt="logo" height={50} width={35} />
+
+          <h4
+            className="hidden text-black font-mono  text-sm  md:block"
+            style={{ fontSize: "12px" }}
+          >
+            ShadMorph
+          </h4>
+          <span className="bg-red-100 text-red-800 text-sm  me-2 px-1 py-0.4 rounded dark:bg-red-900 dark:text-red-300" style={{fontSize:'8px'}}>
+            V 0.1
+          </span>
+          {/* <Badge variant={"destructive"} className="h-4  -mt-2" style={{fontSize:'8px'}}> </Badge> */}
+        </Link>
+
+        <div className="w-full gap-3 flex items-center  justify-end">
+          <SearchBar />
+          <UserNav />
+        </div>
+      </div>
+
+
+      <ResizablePanelGroup
+        direction="horizontal"
+        onLayout={(sizes: number[]) => {
+          //   document.cookie = `react-resizable-panels:layout=${JSON.stringify(
+          //     sizes
+          //   )}`;
+          console.log(sizes);
+          setDefaultLayout(sizes);
+        }}
+        className="h-full grid grid-cols-3  justify-start   w-full "
+      >
+        <TooltipProvider delayDuration={0}>
           <ResizablePanel
             defaultSize={defaultLayout[0]}
             collapsedSize={navCollapsedSize}
@@ -91,39 +114,10 @@ export default function Dashboard({
             }}
             className={cn(
               isCollapsed &&
-                "min-w-[50px] transition-all duration-300 ease-in-out"
+                "min-w-[50px]  transition-all duration-300 ease-in-out",
+              "col-span-1"
             )}
           >
-            <div
-              className={cn(
-                "flex h-[56px] items-center justify-center",
-                isCollapsed ? "h-[52px]" : "px-2"
-              )}
-            >
-              {/* <AccountSwitcher isCollapsed={isCollapsed} accounts={accounts} /> */}
-              <Link
-                href="/"
-                className="flex gap-2 min-h-4 w-full text-center p-2   justify-center  items-center order-first"
-              >
-                {/* <Icons.logo className='h-8 w-8 sm:h-6 sm:w-6' /> */}
-                {/* <LogoSvg
-                  height={isCollapsed ? 25 : 35}
-                  width={isCollapsed ? 25 : 35}
-                /> */}
-                <Image
-                  src={Logo}
-                  alt="logo"
-                  height={isCollapsed ? 35 : 50}
-                  width={isCollapsed ? 35 : 50}
-                />
-                {!isCollapsed ? (
-                  <h4 className="hidden text-white  text-md text-heading3-semibold md:block">
-                    ShadMorph
-                  </h4>
-                ) : null}
-              </Link>
-            </div>
-            <Separator />
             <Nav
               isCollapsed={isCollapsed}
               links={[
@@ -158,12 +152,7 @@ export default function Dashboard({
                   icon: ImagePlus,
                   variant: "ghost",
                 },
-              ]}
-            />
-            <Separator />
-            <Nav
-              isCollapsed={isCollapsed}
-              links={[
+
                 {
                   title: "Guilds",
                   route: "/guilds",
@@ -178,10 +167,10 @@ export default function Dashboard({
                 },
               ]}
             />
-            <Separator />
-            <nav className="grid gap-1 my-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+
+            {/* <nav className="grid gap-1 my-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
               <SignedIn>
-                {/* Mount the UserButton component */}
+
                 <div className="flex justify-start w-full  text-white gap-3 items-center">
                   <UserButton />
                   {!isCollapsed ? <div className="">user</div> : ""}
@@ -190,26 +179,29 @@ export default function Dashboard({
               <SignedOut>
                 <SignInButton />
               </SignedOut>
-            </nav>
+            </nav> */}
           </ResizablePanel>
           <ResizableHandle withHandle />
+        </TooltipProvider>
+        <div className={`w-[60rem]  col-span-${isCollapsed ? 4 : 3}`}>
           <ResizablePanel defaultSize={defaultLayout[1]} minSize={60}>
             {children}
           </ResizablePanel>
-          {thirdSection != null && defaultLayout.length === 3 ? (
-            <>
-              {/* <ResizableHandle withHandle /> */}
-              <ResizablePanel
-                minSize={20}
-                maxSize={30}
-                defaultSize={defaultLayout[2]}
-              >
-                {thirdSection}
-              </ResizablePanel>
-            </>
-          ) : null}
-        </ResizablePanelGroup>
-      </TooltipProvider>
+        </div>
+        {thirdSection != null && defaultLayout.length === 3 ? (
+          <>
+            {/* <ResizableHandle withHandle /> */}
+            <ResizablePanel
+              minSize={10}
+              maxSize={30}
+              className={"col-span-1"}
+              defaultSize={defaultLayout[2]}
+            >
+              {thirdSection}
+            </ResizablePanel>
+          </>
+        ) : null}
+      </ResizablePanelGroup>
     </div>
   );
 }

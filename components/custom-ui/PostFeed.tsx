@@ -9,7 +9,6 @@ import { useInView } from "react-intersection-observer";
 // import Post from "./Post";
 import { Loader2 } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
-import ThreadCard from "../cards/PostCard";
 
 interface PostFeeedProps {
   subredditName?: string;

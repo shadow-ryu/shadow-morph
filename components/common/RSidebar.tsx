@@ -28,8 +28,8 @@ function RightSidebar() {
     return <></>;
   }
   return (
-    <section className="custom-scrollbar rightsidebar min-w-[25rem]">
-      <div className="flex flex-1 flex-col justify-start">
+    <section className="custom-scrollbar rightsidebar w-full">
+      {/* <div className="flex flex-1 flex-col justify-start">
         <h3 className="text-heading4-medium text-light-1">
           Suggested Communities
         </h3>
@@ -48,9 +48,9 @@ function RightSidebar() {
                 />
               ))}
             </>
-          ) : ( */}
+          ) : ( 
           <p className="!text-base-regular text-light-3">No communities yet</p>
-          {/* )} */}
+
         </div>
       </div>
 
@@ -70,11 +70,11 @@ function RightSidebar() {
                 />
               ))}
             </>
-          ) : ( */}
+          ) : (
           <p className="!text-base-regular text-light-3">No users yet</p>
-          {/* )} */}
+        
         </div>
-      </div>
+      </div> */}
     </section>
   );
 }

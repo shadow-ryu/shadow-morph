@@ -10,6 +10,7 @@ interface UserAvatarProps extends AvatarProps {
 }
 
 export function UserAvatar({ user, ...props }: UserAvatarProps) {
+
   return (
     <Avatar {...props}>
       {user.image ? (
@@ -18,6 +19,7 @@ export function UserAvatar({ user, ...props }: UserAvatarProps) {
             fill
             src={user.image}
             alt="profile picture"
+            className="h-4 w-4"
             referrerPolicy="no-referrer"
           />
         </div>

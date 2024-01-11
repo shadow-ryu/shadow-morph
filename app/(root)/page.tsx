@@ -1,7 +1,19 @@
-import ThreadCard from "@/components/cards/PostCard";
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 import RightSidebar from "@/components/common/RSidebar";
 import PostFeed from "@/components/custom-ui/PostFeed";
 import Dashboard from "@/components/custom-ui/dashboard/Dashboard";
+
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -11,8 +23,12 @@ import { db } from "@/lib/db";
 import { presets } from "@/lib/db/schema";
 // import { posts, presets } from "@/lib/db/schema";
 import { sql } from "drizzle-orm";
-import { Search } from "lucide-react";
-const Page = async () => {
+import { ChevronsUpDown, Search } from "lucide-react";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+
+import PostCardNew from "@/components/cards/PostCardNew";
+const Page = () => {
   // const posts = await db.query.posts.findMany({
   //   // Use 'with' to include related data
   //   with: {
@@ -21,20 +37,20 @@ const Page = async () => {
   //   },
   // });
 
-  const fetchPresets = async ({
-    id,
-    key = "ownerId",
-  }: {
-    id: any;
-    key: string;
-  }) => {
-    let [result] = await db
-      .select()
-      .from(presets)
-      // @ts-ignore
-      .where(sql`${presets[key]} = ${id}  `);
-    return result;
-  };
+  // const fetchPresets = async ({
+  //   id,
+  //   key = "ownerId",
+  // }: {
+  //   id: any;
+  //   key: string;
+  // }) => {
+  //   let [result] = await db
+  //     .select()
+  //     .from(presets)
+  //     // @ts-ignore
+  //     .where(sql`${presets[key]} = ${id}  `);
+  //   return result;
+  // };
 
   // Use Promise.all to wait for all asynchronous operations to complete
   // const finalData = await Promise.all(
@@ -333,85 +349,48 @@ const Page = async () => {
       },
     },
   ];
-  console.log(finalData);
-
-  console.log(finalData, "result");
+  const [feedType, setFeedType] = useState("all");
   return (
-    <main className="h-screen w-full bg-dark-3">
+    <main className="h-full w-full bg-dark-3">
       <Dashboard
         navCollapsedSize={3}
         noOFSections={[10, 60, 20]}
         thirdSection={<RightSidebar />}
       >
-        <Tabs defaultValue="all">
-          <div className="flex items-center px-4 py-2">
-            <h1 className="text-xl font-bold text-gray-50  font-serif">Feed</h1>
-            <TabsList className="ml-auto">
-              <TabsTrigger
-                value="all"
-                className="text-zinc-600 dark:text-zinc-200"
-              >
-                All
-              </TabsTrigger>
-              <TabsTrigger
-                value="following"
-                className="text-zinc-600 dark:text-zinc-200"
-              >
-                Following
-              </TabsTrigger>
-            </TabsList>
-          </div>
-          <Separator />
-          <div className="bg-background/95 p-1 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <form>
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search" className="pl-8" />
-              </div>
-            </form>
-          </div>
-          <TabsContent value="all" className="m-0 my-1">
-            {/* <PostFeed initialPosts={finalaleData}/> */}
+        <div className=" h-full w-full flex flex-col items-center justify-start">
+          <Tabs defaultValue="trending" className="h-full  w-full ">
+            <div className="space-between w-full justify-between gap-2 flex items-center px-2 my-1">
+              <div className="">Feed</div>
 
-            <ScrollArea className="h-[90vh] flex flex-col col-span-2 space-y-6 m-2">
-              {finalData?.map((post, index) => {
-                // const votesAmt = post.votes.reduce((acc, vote) => {
-                //   if (vote.type === "UP") return acc + 1;
-                //   if (vote.type === "DOWN") return acc - 1;
-                //   return acc;
-                // }, 0);
-                // let data= JSON.parse(post?.value)
-                // consol   e.log(post, "ff");
-                // const currentVote = post.votes.find(
-                //   (vote) => vote.userId === session?.user.id
-                // );
-                // if (posts.length - 1 === index) {
-                //   return (
-                //     <li key={post.id} ref={ref}>
-                //       <Post
-                //         post={post}
-                //         commentAmt={post.comments.length}
-                //         subredditName={post.subreddit.name}
-                //         votesAmt={votesAmt}
-                //         currentVote={currentVote}
-                //       />
-                //     </li>
-                //   );
-                // }
-                return (
+              <TabsList
+                className="h-8 p-2 flex-end "
+                style={{ fontSize: "9px" }}
+              >
+                <TabsTrigger value="trending" className="relative  rounder-md">
+                  Trending
+                </TabsTrigger>
+                <TabsTrigger value="following" className="rounder-md">
+                  Following
+                </TabsTrigger>
+                {/* <TabsTrigger value="" disabled>
+                  Trending
+                </TabsTrigger> */}
+              </TabsList>
+            </div>
+            <Separator />
+            <TabsContent
+              value="trending"
+              className="border-none p-0 outline-none"
+            >
+              <ScrollArea className="h-[95vh] flex flex-col col-span-2 mx-2 ">
+                {finalData?.map((post, index) => {
                   // @ts-ignore
-                  <div className="" key={post.id}>
-                    {/* @ts-ignore */}
-                    <ThreadCard post={post} />
-                    <Separator className="my-2 h-1" />
-                  </div>
-                  // <div key={post.id} className="text-white h-18 border-red-700 bg-gray-600" ref={ref}>{JSON.stringify(post)}</div>
-                );
-              })}
-            </ScrollArea>
-          </TabsContent>
-          <TabsContent value="following" className="m-0"></TabsContent>
-        </Tabs>
+                  return <PostCardNew key={post.id + index} post={post} />;
+                })}
+              </ScrollArea>
+            </TabsContent>
+          </Tabs>
+        </div>
       </Dashboard>
     </main>
   );
