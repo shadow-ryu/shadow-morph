@@ -1,12 +1,35 @@
-
 import Providers from "@/components/custom-ui/Provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/nextjs";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
-
+import Link from "next/link";
+import Image from "next/image";
+import Logo from "@/public/pac-logo.png";
+import SearchBar from "@/components/common/SearchBar";
+import { UserNav } from "@/components/common/UserNav";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Nav } from "@/components/common/Navbar";
+import {
+  ActivitySquare,
+  AlertCircle,
+  Archive,
+  ArchiveX,
+  Bookmark,
+  File,
+  ImagePlus,
+  Inbox,
+  MessagesSquare,
+  PenBox,
+  Search,
+  Send,
+  ShoppingCart,
+  Swords,
+  Trash2,
+  Users2,
+} from "lucide-react";
+import RightSidebar from "@/components/common/RSidebar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -27,7 +50,101 @@ export default function RootLayout({
             className={`${inter.className} bg-dark-3 w-full h-screen`}
             suppressHydrationWarning={true}
           >
-            {children}
+            <div className="h-[3.5rem] w-full flex item-center self-center   justify-between rounded-none  border-b  ">
+              <Link
+                href="/"
+                className="flex gap-1  w-[11.5rem] h-[3rem] text-center px-2 mt-1   justify-start  items-center order-first bg-slate-400 rounded-xl "
+              >
+                <Image src={Logo} alt="logo" height={50} width={35} />
+
+                <h4
+                  className="hidden text-black font-mono  text-sm  md:block"
+                  style={{ fontSize: "12px" }}
+                >
+                  ShadMorph
+                </h4>
+                <span
+                  className="bg-red-100 text-red-800 text-sm  me-2 px-1 py-0.4 rounded dark:bg-red-900 dark:text-red-300"
+                  style={{ fontSize: "8px" }}
+                >
+                  V 0.1
+                </span>
+                {/* <Badge variant={"destructive"} className="h-4  -mt-2" style={{fontSize:'8px'}}> </Badge> */}
+              </Link>
+
+              <div className="w-full gap-3 flex items-center  justify-end">
+                <SearchBar />
+                <UserNav />
+              </div>
+            </div>
+            <div className="flex   h-full min-h-fit ">
+              <div className={"col-span-1   w-28rem min-w-[20rem] max-w-[25rem] hidden lg:block border-x border-white"}>
+                <Nav
+                  // isCollapsed={isCollapsed}
+                  links={[
+                    {
+                      title: "Home",
+                      icon: Inbox,
+                      route: "/",
+                      variant: "default",
+                    },
+                    {
+                      title: "Drafts",
+                      route: "/drafts",
+                      icon: File,
+                      variant: "ghost",
+                    },
+                    {
+                      title: "Activity",
+                      route: "/activity",
+                      icon: ActivitySquare,
+                      variant: "ghost",
+                    },
+
+                    {
+                      title: "Bookmark",
+                      route: "/bookmark",
+                      icon: Bookmark,
+                      variant: "ghost",
+                    },
+                    {
+                      title: "Create Post",
+                      route: "",
+                      icon: ImagePlus,
+                      variant: "ghost",
+                    },
+
+                    {
+                      title: "Guilds",
+                      route: "/guilds",
+                      icon: Swords,
+                      variant: "ghost",
+                    },
+                    {
+                      title: "Updates",
+                      route: "/app_updates",
+                      icon: AlertCircle,
+                      variant: "ghost",
+                    },
+                  ]}
+                />
+
+                {/* <nav className="grid gap-1 my-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+              <SignedIn>
+
+                <div className="flex justify-start w-full  text-white gap-3 items-center">
+                  <UserButton />
+                  {!isCollapsed ? <div className="">user</div> : ""}
+                </div>
+              </SignedIn>
+              <SignedOut>
+                <SignInButton />
+              </SignedOut>
+            </nav> */}
+              </div>
+              {children}
+              <RightSidebar />
+            </div>
 
             <Toaster />
           </body>

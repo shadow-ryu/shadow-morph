@@ -1,5 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { db } from "./db";
+import { presets } from "./db/schema";
  
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -43,3 +45,18 @@ export const generateResponse=({status=404,success=false,data={},err=true,messag
   }
 
 }
+ 
+  export const fetchPresets = async ({
+    id,
+    key = "ownerId",
+  }: {
+    id: any;
+    key: string;
+  }) => {
+    let [result] = await db
+      .select()
+      .from(presets)
+      // @ts-ignore
+      .where(sql`${presets[key]} = ${id}  `);
+    return result;
+  };

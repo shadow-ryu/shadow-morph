@@ -183,8 +183,8 @@ export default function Dashboard({
           </ResizablePanel>
           <ResizableHandle withHandle />
         </TooltipProvider>
-        <div className={`w-[60rem]  col-span-${isCollapsed ? 4 : 3}`}>
-          <ResizablePanel defaultSize={defaultLayout[1]} minSize={60}>
+        <div className={`w-[50rem]  h-full col-span-${isCollapsed ? 3 : 2}`}>
+          <ResizablePanel  className="h-full" defaultSize={defaultLayout[1]} minSize={60}>
             {children}
           </ResizablePanel>
         </div>

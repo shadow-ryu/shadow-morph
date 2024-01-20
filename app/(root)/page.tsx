@@ -1,17 +1,7 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 import RightSidebar from "@/components/common/RSidebar";
-import PostFeed from "@/components/custom-ui/PostFeed";
+import PostFeed from "@/components/post/PostFeed";
 import Dashboard from "@/components/custom-ui/dashboard/Dashboard";
 
 import { Input } from "@/components/ui/input";
@@ -19,15 +9,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 // import { fetchPosts } from "@/lib/db/quries";
-import { db } from "@/lib/db";
+// import { db } from "@/lib/db";
 import { presets } from "@/lib/db/schema";
 // import { posts, presets } from "@/lib/db/schema";
 import { sql } from "drizzle-orm";
-import { ChevronsUpDown, Search } from "lucide-react";
-import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 
-import PostCardNew from "@/components/cards/PostCardNew";
+import { useState } from "react";
+
+import PostCardNew from "@/components/post/PostCardNew";
 const Page = () => {
   // const posts = await db.query.posts.findMany({
   //   // Use 'with' to include related data
@@ -63,6 +52,7 @@ const Page = () => {
   //     }
   //     return post;
   //   })
+
   // );
 
   let finalData = [
@@ -250,6 +240,45 @@ const Page = () => {
               },
             },
           },
+          {
+            id: "TcUNySG15P",
+            type: "paragraph",
+            data: {
+              text: `Workspace in classic editors is made of a single contenteditable element, used to create different HTML markups. Editor.js workspace consists of separate Blocks: paragraphs, headings, images, lists, quotes, etc. Each of them is an independent <sup data-tune="footnotes">1</sup> contenteditable element (or more complex structure) provided by Plugin and united by Editor's Core.`,
+            },
+            tunes: {
+              footnotes: [
+                "It works more stable then in other WYSIWYG editors. Same time it has smooth and well-known arrow navigation behavior like classic editors.",
+              ],
+            },
+          },
+          {
+            id: "M3UXyblhAo",
+            type: "header",
+            data: {
+              text: "What does it mean clean data output?",
+              level: 3,
+            },
+          },
+          {
+            id: "KOcIofZ3Z1",
+            type: "paragraph",
+            data: {
+              text: `There are dozens of ready-to-use Blocks and a simple API <sup data-tune="footnotes">2</sup> for creating any Block you need. For example, you can implement Blocks for Tweets, Instagram posts, surveys and polls, CTA buttons, and even games.`,
+            },
+            tunes: {
+              footnotes: [
+                "Just take a look at our Creating Block Tool guide. You'll be surprised.",
+              ],
+            },
+          },
+          {
+            id: "ksCokKAhQw",
+            type: "paragraph",
+            data: {
+              text: `Classic WYSIWYG editors produce raw HTML-markup with both content data and content appearance. On the contrary, <mark class="cdx-marker">Editor.js outputs JSON object</mark> with data of each Block.`,
+            },
+          },
         ],
         version: "2.28.2",
       },
@@ -298,38 +327,131 @@ const Page = () => {
     },
     {
       id: 16,
-      title: "new2",
+      title: "tester",
       authorId: "user_2YXCmSzpGrwkFYlFbhh79csdJdH",
       guildId: null,
       isGuild: false,
       content: {
-        time: 1704390355612,
+        time: 1705048369376,
         blocks: [
           {
-            id: "rr-JNItV4o",
+            id: "mhTl6ghSkV",
             type: "paragraph",
             data: {
-              text: "tester",
+              text:
+                "Hey. Meet the new Editor. On this picture you can see it in action. Then, try a demo 🤓",
             },
           },
           {
-            id: "9n6haFwLWC",
-            type: "linkTool",
+            id: "l98dyx3yjb",
+            type: "header",
             data: {
-              link: "https://github.com/shadow-ryu",
-              meta: {
-                title: "shadow-ryu (Vishnu Kulkarni) · GitHub",
-                description:
-                  "Presently crafting 𝕾𝖍𝖆𝖉𝖔𝖜 𝕸𝖔𝖗𝖕𝖍. shadow-ryu has 43 repositories available. Follow their code on GitHub.",
-                image: {
-                  url:
-                    "https://avatars.githubusercontent.com/u/67259992?v=4?s=400",
-                },
+              text: "Key features",
+              level: 3,
+            },
+          },
+          {
+            id: "os_YI4eub4",
+            type: "list",
+            data: {
+              type: "unordered",
+              items: [
+                "It is a block-style editor",
+                "It returns clean data output in JSON",
+                `Designed to be extendable and pluggable with a <a href="https://editorjs.io/creating-a-block-tool">simple API</a>`,
+              ],
+            },
+          },
+          {
+            id: "1yKeXKxN7-",
+            type: "header",
+            data: {
+              text: "What does it mean «block-styled editor»",
+              level: 3,
+            },
+          },
+          {
+            id: "TcUNySG15P",
+            type: "paragraph",
+            data: {
+              text: `Workspace in classic editors is made of a single contenteditable element, used to create different HTML markups. Editor.js workspace consists of separate Blocks: paragraphs, headings, images, lists, quotes, etc. Each of them is an independent <sup data-tune="footnotes">1</sup> contenteditable element (or more complex structure) provided by Plugin and united by Editor's Core.`,
+            },
+            tunes: {
+              footnotes: [
+                "It works more stable then in other WYSIWYG editors. Same time it has smooth and well-known arrow navigation behavior like classic editors.",
+              ],
+            },
+          },
+          {
+            id: "M3UXyblhAo",
+            type: "header",
+            data: {
+              text: "What does it mean clean data output?",
+              level: 3,
+            },
+          },
+          {
+            id: "KOcIofZ3Z1",
+            type: "paragraph",
+            data: {
+              text: `There are dozens of ready-to-use Blocks and a simple API <sup data-tune="footnotes">2</sup> for creating any Block you need. For example, you can implement Blocks for Tweets, Instagram posts, surveys and polls, CTA buttons, and even games.`,
+            },
+            tunes: {
+              footnotes: [
+                "Just take a look at our Creating Block Tool guide. You'll be surprised.",
+              ],
+            },
+          },
+          {
+            id: "ksCokKAhQw",
+            type: "paragraph",
+            data: {
+              text: `Classic WYSIWYG editors produce raw HTML-markup with both content data and content appearance. On the contrary, <mark class="cdx-marker">Editor.js outputs JSON object</mark> with data of each Block.`,
+            },
+          },
+          {
+            id: "XKNT99-qqS",
+            type: "attaches",
+            data: {
+              file: {
+                url: "https://drive.google.com/user/catalog/my-file.pdf",
+                size: 12902,
+                name: "file.pdf",
+                extension: "pdf",
               },
+              title: "My file",
+            },
+          },
+          {
+            id: "7RosVX2kcH",
+            type: "paragraph",
+            data: {
+              text:
+                "Given data can be used as you want: render with HTML for Web clients, render natively for mobile apps, create the markup for Facebook Instant Articles or Google AMP, generate an audio version, and so on.",
+            },
+          },
+          {
+            id: "eq06PsNsab",
+            type: "paragraph",
+            data: {
+              text:
+                "Clean data is useful to sanitize, validate and process on the backend.",
+            },
+          },
+          {
+            id: "hZAjSnqYMX",
+            type: "image",
+            data: {
+              file: {
+                url: "",
+              },
+              withBorder: false,
+              withBackground: false,
+              stretched: true,
+              caption: "CodeX Code Camp 2019",
             },
           },
         ],
-        version: "2.28.2",
       },
       createdAt: "2024-01-04T17:45:58.000Z",
       updatedAt: "2024-01-04T17:45:58.000Z",
@@ -349,49 +471,52 @@ const Page = () => {
       },
     },
   ];
+
   const [feedType, setFeedType] = useState("all");
   return (
-    <main className="h-full w-full bg-dark-3">
-      <Dashboard
-        navCollapsedSize={3}
-        noOFSections={[10, 60, 20]}
-        thirdSection={<RightSidebar />}
-      >
-        <div className=" h-full w-full flex flex-col items-center justify-start">
-          <Tabs defaultValue="trending" className="h-full  w-full ">
-            <div className="space-between w-full justify-between gap-2 flex items-center px-2 my-1">
-              <div className="">Feed</div>
+    <main className=" bg-dark-3">
+      <div className=" flex flex-col items-center justify-start">
+        <Tabs defaultValue="trending" className="h-full  w-full ">
+          <div className="space-between w-full justify-between gap-2 flex items-center px-2 my-1">
+            <div className="">Feed</div>
 
-              <TabsList
-                className="h-8 p-2 flex-end "
-                style={{ fontSize: "9px" }}
-              >
-                <TabsTrigger value="trending" className="relative  rounder-md">
-                  Trending
-                </TabsTrigger>
-                <TabsTrigger value="following" className="rounder-md">
-                  Following
-                </TabsTrigger>
-                {/* <TabsTrigger value="" disabled>
+            <TabsList className="h-8 p-2 flex-end " style={{ fontSize: "9px" }}>
+              <TabsTrigger value="trending" className="relative  rounder-md">
+                Trending
+              </TabsTrigger>
+              <TabsTrigger value="following" className="rounder-md">
+                Following
+              </TabsTrigger>
+              {/* <TabsTrigger value="" disabled>
                   Trending
                 </TabsTrigger> */}
-              </TabsList>
-            </div>
-            <Separator />
-            <TabsContent
-              value="trending"
-              className="border-none p-0 outline-none"
-            >
-              <ScrollArea className="h-[95vh] flex flex-col col-span-2 mx-2 ">
-                {finalData?.map((post, index) => {
-                  // @ts-ignore
-                  return <PostCardNew key={post.id + index} post={post} />;
-                })}
-              </ScrollArea>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </Dashboard>
+            </TabsList>
+          </div>
+          <Separator />
+          <TabsContent
+            value="trending"
+            className="border-none p-0 outline-none"
+          >
+            <ScrollArea className="h-[42rem] flex flex-col col-span-2 mx-2 ">
+              {finalData?.map((post, index) => {
+                // @ts-ignore
+                return <PostCardNew key={post.id + index} post={post} />;
+              })}
+            </ScrollArea>
+          </TabsContent>
+          <TabsContent
+            value="following"
+            className="border-none p-0 outline-none"
+          >
+            <ScrollArea className="h-[42rem] flex flex-col col-span-2 mx-2 ">
+              {finalData?.map((post, index) => {
+                // @ts-ignore
+                return <PostCardNew key={post.id + index} post={post} />;
+              })}
+            </ScrollArea>
+          </TabsContent>
+        </Tabs>
+      </div>
     </main>
   );
 };

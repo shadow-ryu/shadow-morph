@@ -1,6 +1,6 @@
 // import EditiorSkeleton from "@/components/custom-ui/editior/EditiorSkeleton";
 import Dashboard from "@/components/custom-ui/dashboard/Dashboard";
-import Editor from "@/components/custom-ui/editior/Editor";
+import Editor from "@/components/editior/Editor";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,

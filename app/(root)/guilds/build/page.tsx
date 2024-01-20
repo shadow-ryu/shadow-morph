@@ -1,5 +1,5 @@
 import Dashboard from "@/components/custom-ui/dashboard/Dashboard";
-import GuildForm from "@/components/forms/GuildForm";
+import GuildForm from "@/components/guild/GuildForm";
 
 const Page = async () => {
   return (

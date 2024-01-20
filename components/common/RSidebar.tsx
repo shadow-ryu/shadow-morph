@@ -28,7 +28,7 @@ function RightSidebar() {
     return <></>;
   }
   return (
-    <section className="custom-scrollbar rightsidebar w-full">
+    <section className="custom-scrollbar rightsidebar max-w-[20rem] w-full">
       {/* <div className="flex flex-1 flex-col justify-start">
         <h3 className="text-heading4-medium text-light-1">
           Suggested Communities

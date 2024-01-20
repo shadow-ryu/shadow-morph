@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@clerk/nextjs";
 import { createPost } from "@/lib/actions/post.actions";
 import { navigate } from "@/lib/actions/common.action";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type FormData = z.infer<typeof PostValidator>;
 
@@ -27,9 +28,10 @@ interface EditorProps {
   isGuild?:boolean,
   postId?:string;
 
+
 }
 
-export const Editor: React.FC<EditorProps> = ({postId, guildId,isGuild=false }) => {
+export const Editor: React.FC<EditorProps> = ({postId, guildId,isGuild=false}) => {
   const ref = useRef<EditorJS>();
   const _titleRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
@@ -219,7 +221,7 @@ export const Editor: React.FC<EditorProps> = ({postId, guildId,isGuild=false }) 
             className="w-full resize-none appearance-none overflow-hidden p-4 bg-[#f6faef] text-3xl  rounded-md font-bold focus:outline-none"
           />
           <div className="bg-[#f6faef] flex-col justify-start rounded-md items-center">
-            <div id="editor" className="min-h-[500px] min-w-max" />
+           <div id="editor" />
             <p className="p-2 text-sm text-gray-500">
               Use{" "}
               <kbd className="rounded-md border bg-muted px-1 text-xs uppercase">

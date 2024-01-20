@@ -11,7 +11,7 @@ import { Button } from "../ui/button";
 import { formatDateString } from "@/lib/utils";
 import { navigate } from "@/lib/actions/common.action";
 
-const GuildHoverCard = ({ guild, background, children }: any) => {
+const GuildHoverCard = ({ guild, preset, children }: any) => {
   console.log(guild);
   return (
     <HoverCard>
@@ -27,12 +27,13 @@ const GuildHoverCard = ({ guild, background, children }: any) => {
         </Button>
       </HoverCardTrigger>
       <HoverCardContent
-        className="w-80"
+        className="w-full justify-center items-center flex"
         style={{
-          background: background,
+          background: preset?.backgroundColor || "lightgray !important",
+          color: preset?.textColor || "black !important",
         }}
       >
-        <div className="flex flex-col justify-between  items-center space-x-4">
+        <div className="flex flex-col justify-center  items-center space-x-4">
           <Avatar>
             <AvatarImage
               src={guild.guildLogo}
@@ -45,10 +46,19 @@ const GuildHoverCard = ({ guild, background, children }: any) => {
 
           <div className="">
             <div className="space-y-1">
-              <h4 className="text-sm font-semibold">
-                {guild?.name.toLocaleUpperCase()} @{guild.guildHandle}
+              <h4
+                className="text-sm font-semibold"
+                style={{ color: preset?.userTitleColor || "black !important" }}
+              >
+                {guild?.name.toLocaleUpperCase()}
               </h4>
-              <p className="text-sm">{guild?.info}</p>
+              <p>@{guild.guildHandle}</p>
+              <p
+                className="text-sm text-center"
+
+              >
+                {guild?.info}
+              </p>
               <div className="flex items-center pt-2">
                 <CalendarDays className="mr-2 h-4 w-4 opacity-70" />{" "}
                 <span className="text-xs text-muted-foreground">

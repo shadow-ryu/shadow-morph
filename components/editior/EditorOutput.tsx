@@ -1,28 +1,31 @@
 "use client";
 
-import { FC } from "react";
+import { FC, Suspense, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import CustomImageRenderer from "./render/CustomImageRenderer";
 import CustomCodeRenderer from "./render/CustomCodeRenderer";
 
 import Link from "next/link";
+import { Loader } from "lucide-react";
+// import Output from  "editorjs-react-renderer";
 const Output = dynamic(
   async () => (await import("editorjs-react-renderer")).default,
   { ssr: false }
 );
-
 interface EditorOutputProps {
   content: any;
   isDetail: boolean;
+  isLoaded?: boolean;
 }
 
 function CustomLinkRenderer({ data }: any) {
+  console.log("first", data);
   return (
     <Link
       href={data.link}
       className="flex justify-between items-center mx-auto w-full h-[4rem] flex-wrap border border-gray-300 shadow-md rounded-md cursor-pointer pr-4 "
     >
-      <div
+      <p
         className="flex flex-col justify-start items-start  w-96 p-4"
         style={{ fontSize: "8px" }}
       >
@@ -32,7 +35,7 @@ function CustomLinkRenderer({ data }: any) {
         <p className="text-left  font-light text-base cursor-pointer">
           {data.meta.description}
         </p>
-      </div>
+      </p>
       <img
         src={data.meta.image.url}
         alt="image of link"
@@ -49,7 +52,12 @@ const style = {
   },
 };
 
-const EditorOutput: FC<EditorOutputProps> = ({ content, isDetail }) => {
+const EditorOutput: FC<EditorOutputProps> = ({
+  content,
+  isDetail,
+  isLoaded,
+}) => {
+  // console.log(content)
   const renderers = {
     image: CustomImageRenderer,
     code: CustomCodeRenderer,
@@ -59,13 +67,20 @@ const EditorOutput: FC<EditorOutputProps> = ({ content, isDetail }) => {
     //  @ts-ignore
     renderers["linktool"] = CustomLinkRenderer;
   }
+
   return (
-    <Output
+    <Suspense
+    fallback={
+     <div className="flex justify-center items-center w-full"> <Loader className="h-5 w-5 animate-spin text-gray-100" /></div>
+    }
+  >
+   <Output
       style={style}
-      className="text-sm"
+      className={`text-sm `}
       renderers={renderers}
       data={content}
     />
+    </Suspense>
   );
 };
 

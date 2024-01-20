@@ -38,3 +38,5 @@ export interface StoreType {
   appCustomizeSetting: AppCustomizeSetting;
   setCustomizeSetting: (appCustomizeSetting: AppCustomizeSetting) => void;
 }
+
+declare module 'react-quill-image-uploader';

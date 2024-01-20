@@ -51,7 +51,16 @@ export const postRelations = relations(posts, ({ one, many }) => ({
   // postConfigurations:many(postConfigurations),
   posts: many(posts),
 }));
+export const comments = pgTable('comments', {
+  id: serial('id').primaryKey(),
+  text: varchar('text', { length: 255 }),
+  createdAt: timestamp('createdAt').defaultNow(),
+  authorId: varchar('authorId').references(() => users.id),
+  postId: serial('postId').references(() => posts.id),
 
+  replyToId: serial('replyToId'),
+  votes: json('votes'),
+});
 export const guilds = pgTable("guilds", {
   id: serial("id").primaryKey(),
   name: varchar("title", { length: 256 }),
@@ -110,3 +119,50 @@ export const presets = pgTable("presets", {
 //     primaryKey: [self.userId, self.postId],
 //   })
 // );
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  username: string;
+  image: string;
+  isSetup: boolean;
+  bio: string;
+  interests: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+export interface Post {
+  id: number;
+  title: string;
+  authorId: string;
+  guildId: number;
+  isGuild: boolean;
+  content: any; // Adjust the type as per your data structure
+  createdAt: Date;
+  updatedAt: Date;
+  parentId?: number;
+}
+export interface Guild {
+  id: number;
+  name: string;
+  guildHandle: string;
+  ownerId: string;
+  info: string;
+  guildLogo: string;
+  tags: string;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface Preset {
+  id: number;
+  presetType: string;
+  pageType: string;
+  ownerId: string;
+  guildId: number;
+  backgroundColor: string;
+  textColor: string;
+  userTitleColor: string;
+  customSetting: any; // Adjust the type as per your data structure
+  createdAt: string;
+  updatedAt: string;
+}
