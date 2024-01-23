@@ -167,9 +167,9 @@ function MorphCard({ post, isDetail = false }: Props) {
           parentId={parentId}
           isComment={isComment}
         />  */}
-      {/* @ts-ignore */}
-      {comments.length > 0 ? (
+
         <div className="ml-1 mt-3 flex items-center gap-2">
+          {/* @ts-ignore */}
           {comments.forEach(({ comment, index }: any) => (
             <Image
               key={index}
@@ -189,7 +189,7 @@ function MorphCard({ post, isDetail = false }: Props) {
             </p>
           </Link>
         </div>
-      ) : null}
+
 
       {guild && isGuild ? (
         <Link

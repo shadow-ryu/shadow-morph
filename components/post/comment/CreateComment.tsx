@@ -64,6 +64,7 @@ const CreateComment: FC<CreateCommentProps> = ({
     await addComment({
       userId:userId!,
       postId,
+      // @ts-ignore
       content:content,
       isReply: isReply,
       pathname,

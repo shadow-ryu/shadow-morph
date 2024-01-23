@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 // import { fetchPosts } from "@/lib/db/quries";
 // import { db } from "@/lib/db";
-import { presets, users } from "@/lib/db/schema";
+import { Comment, presets, users } from "@/lib/db/schema";
 // import { posts, presets } from "@/lib/db/schema";
 import { eq, sql } from "drizzle-orm";
 
@@ -16,7 +16,7 @@ import { useState } from "react";
 import { db } from "@/lib/db";
 import MorphCard from "@/components/post/MorphCard";
 
-// import PostCardNew from "@/components/post/PostCardNew";
+
 const Page = async () => {
   const posts = await db.query.posts
     .findMany({
@@ -36,8 +36,8 @@ const Page = async () => {
           return post;
         }
 
-        let comments = post?.comments.slice(0, 2);
-        comments.map(async (comment) => {
+        let comments:any = post?.comments.slice(0, 2);
+        comments.map(async (comment:any) => {
           const details = await db
             .select()
             .from(users)
@@ -75,7 +75,7 @@ const Page = async () => {
       return post;
     })
   );
-  
+
 
   return (
     <main className=" w-full bg-dark-3">
@@ -103,7 +103,7 @@ const Page = async () => {
           >
             {/* <ScrollArea className="h-[42rem] flex flex-col col-span-2 mx-2 ">
               {finalData?.map((post, index) => {
-                // @ts-ignore
+                // 
                 return <PostCardNew key={post.id + index} post={post} />;
               })}
             </ScrollArea> */}
@@ -114,6 +114,7 @@ const Page = async () => {
           >
             <div className="h-[42rem] flex  text-white flex-col col-span-2 mx-2 ">
               {finalData?.map((post, index) => {
+                //@ts-ignore
                 return (<MorphCard key={post.id} post={post} />);
               })}
             </div>

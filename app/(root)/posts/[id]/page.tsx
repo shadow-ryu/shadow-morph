@@ -77,7 +77,6 @@ const Page: React.FC<PageProps> = async ({ params }) => {
 
       <div className="w-full mt-[1rem]">
         <div className="h-48 w-full rounded-md">
-          {console.log(userInfo)}
           {userInfo ? (
             <>
               <CreateComment

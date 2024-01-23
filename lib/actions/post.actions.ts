@@ -96,6 +96,7 @@ export async function fetchPostById({ id }: { id: number | string }) {
      
       with: {
         author: true,
+    // @ts-ignore
         guild: true,
       },
     });

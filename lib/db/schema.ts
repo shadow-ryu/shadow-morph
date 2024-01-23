@@ -58,6 +58,7 @@ export const postRelations = relations(posts, ({ one, many }) => ({
     references: [guilds.id],
   }),
   comments: many(comments, {
+    // @ts-ignore
     author: true,
   }),
 }));

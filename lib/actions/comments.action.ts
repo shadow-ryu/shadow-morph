@@ -12,7 +12,7 @@ interface CreateCommentParams {
   userId: string;
   commentId?:string
   postId: string;
-  content: any;
+  content: string;
   isReply: boolean;
   replyToId?: string;
   pathname?:any
