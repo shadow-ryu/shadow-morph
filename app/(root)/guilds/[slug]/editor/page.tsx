@@ -1,5 +1,5 @@
 import CustomizingEditor from "@/components/custom-ui/personalize/CustomizerEditor";
-import { fetchUsers } from "@/lib/actions/user.actions";
+import { fetchUserById} from "@/lib/actions/user.actions";
 import { db } from "@/lib/db";
 import { guilds } from "@/lib/db/schema";
 import { currentUser } from "@clerk/nextjs";
@@ -18,7 +18,7 @@ const Page = async ({ params }: PageProps) => {
   const user = await currentUser();
   if (!user) return redirect("/");
 
-  let  userInfo = await fetchUsers(user.id);
+  let  userInfo = await fetchUserById(user.id);
   // userInfo=userInfo[0];
   // console.log([0],slug,"slug")
   // if (!userInfo?.onboarded) redirect("/onboarding");

@@ -26,7 +26,7 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updatedAt", { mode: "string" }).defaultNow(),
 });
 
-export const posts:any = pgTable("posts", {
+export const posts: any = pgTable("posts", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 256 }),
   authorId: varchar("authorId").references(() => users.id),
@@ -35,10 +35,19 @@ export const posts:any = pgTable("posts", {
   content: json("content"),
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
   updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow(),
-  parentId: integer("parentId")
+  parentId: integer("parentId"),
 });
 
-
+export const comments = pgTable("comments", {
+  id: serial("id").primaryKey(),
+  content: varchar("content", { length: 255 }),
+  createdAt: timestamp("createdAt").defaultNow(),
+  authorId: varchar("authorId").references(() => users.id),
+  postId: serial("postId").references(() => posts.id), // Add this line
+  isReply: boolean("isReply").default(false),
+  replyToId: serial("replyToId"),
+  votes: json("votes"),
+});
 export const postRelations = relations(posts, ({ one, many }) => ({
   author: one(users, {
     fields: [posts.authorId],
@@ -48,19 +57,23 @@ export const postRelations = relations(posts, ({ one, many }) => ({
     fields: [posts.guildId],
     references: [guilds.id],
   }),
-  // postConfigurations:many(postConfigurations),
-  posts: many(posts),
+  comments: many(comments, {
+    author: true,
+  }),
 }));
-export const comments = pgTable('comments', {
-  id: serial('id').primaryKey(),
-  text: varchar('text', { length: 255 }),
-  createdAt: timestamp('createdAt').defaultNow(),
-  authorId: varchar('authorId').references(() => users.id),
-  postId: serial('postId').references(() => posts.id),
+export const commentRelations = relations(comments, ({ one, many }) => ({
+  author: one(users, {
+    fields: [comments.authorId],
+    references: [users.id],
+  }),
+  post: one(posts, {
+    fields: [comments.postId],
+    references: [posts.id],
+  }),
+  // postConfigurations:many(postConfigurations),
+  comments: many(comments),
+}));
 
-  replyToId: serial('replyToId'),
-  votes: json('votes'),
-});
 export const guilds = pgTable("guilds", {
   id: serial("id").primaryKey(),
   name: varchar("title", { length: 256 }),
@@ -87,9 +100,9 @@ export const presets = pgTable("presets", {
   ownerId: varchar("ownerId").references(() => users.id),
   guildId: integer("guildId").references(() => guilds.id),
   backgroundColor: varchar("backgroundColor"),
-  textColor:  varchar("textColor"),
+  textColor: varchar("textColor"),
   userTitleColor: varchar("userTitleColor"),
-  customSetting:json("customSetting"),
+  customSetting: json("customSetting"),
   createdAt: timestamp("createdAt", { mode: "string" }).defaultNow(),
   updatedAt: timestamp("updatedAt", { mode: "string" }).defaultNow(),
 });
@@ -104,9 +117,8 @@ export const presets = pgTable("presets", {
 //   })
 // );
 
- 
 // export const likeEnum = pgEnum('unlike', ['like']);
- 
+
 // export const postConfigurations = pgTable(
 //   "post_configurations",
 //   {
@@ -165,4 +177,14 @@ export interface Preset {
   customSetting: any; // Adjust the type as per your data structure
   createdAt: string;
   updatedAt: string;
+}
+export interface Comment {
+  id: number;
+  content: string;
+  createdAt: Date;
+  authorId: string;
+  postId: number;
+  isReply: boolean;
+  replyToId?: number;
+  votes: any; 
 }

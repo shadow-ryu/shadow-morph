@@ -1,3 +1,5 @@
+import { Comment, Guild, Post, Preset, User } from "@/lib/db/schema";
+
 export interface UserProfile {
   bannerImage?: any | undefined;
 }
@@ -40,3 +42,12 @@ export interface StoreType {
 }
 
 declare module 'react-quill-image-uploader';
+interface PostComment extends Comment {
+  author: User;
+}
+interface ExpendedPost extends Post {
+  author: User;
+  guild: Guild | null;
+  comments: PostComment[];
+  preset?: Preset;
+}

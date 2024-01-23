@@ -2,9 +2,12 @@
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { InferInsertModel, eq } from "drizzle-orm";
-export async function fetchUsers(userId: string) {
+export async function fetchUserById(userId: string) {
   try {
-    const user = await db.select().from(users).where(eq(users.id, userId));
+    const user = await db.query.users.findFirst({
+      where:eq(users.id, userId)
+    })
+
     return user;
   } catch (err) {
     if (err instanceof Error) console.log(err.stack);

@@ -1,8 +1,9 @@
 
 import AccountProfile from "@/components/forms/AccountProfile";
-import { fetchUsers } from "@/lib/actions/user.actions";
+import  {fetchUserById} from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import { User } from "@/lib/db/schema";
 
 
 
@@ -10,7 +11,7 @@ import { redirect } from "next/navigation";
 async function Page() {
   const user = await currentUser();
   if (!user) return null; // to avoid typescript warnings
-  const [userInfo]:any = await fetchUsers(user.id);
+  const userInfo:User|any = await fetchUserById(user.id);
   console.log(userInfo);
   if (userInfo?.isSetup) redirect("/");
 

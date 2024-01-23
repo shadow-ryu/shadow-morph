@@ -14,9 +14,13 @@ import { Separator } from "@/components/ui/separator";
 import { fetchPresets } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { db } from "@/lib/db";
-import { posts } from "@/lib/db/schema";
+import { Guild, Post, Preset, User, comments, posts } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { currentUser } from "@clerk/nextjs";
+import MorphCard from "@/components/post/MorphCard";
+import { fetchUserById } from "@/lib/actions/user.actions";
+import { ExpendedPost } from "@/types/types";
+import CommentCard from "@/components/post/comment/comment";
 interface PageProps {
   params: {
     id: string;
@@ -25,21 +29,27 @@ interface PageProps {
 
 const Page: React.FC<PageProps> = async ({ params }) => {
   const { id } = params;
-  const post = await db.query.posts.findFirst({
+  // @ts-ignore
+  const post: ExpendedPost = await db.query.posts.findFirst({
     where: (posts, { eq }) => eq(posts.id, id),
 
     with: {
       author: true,
+      // @ts-ignore
       guild: true,
     },
   });
   if (!post || !id) {
     return notFound();
   }
-
+   // @ts-ignore
   post["comments"] =
-    (await db.select().from(posts).where(eq(posts.parentId, id))) || [];
+    (await db.query.comments.findMany({
+      // @ts-ignore
+      where: (comments, { eq }) => eq(comments.postId, id),
+    })) || [];
   const fetchPresetDetails = async () => {
+    // @ts-ignore
     post["preset"] = await fetchPresets({
       key: "guildId",
       id: post.guildId,
@@ -49,69 +59,56 @@ const Page: React.FC<PageProps> = async ({ params }) => {
     fetchPresetDetails();
   }
   const user = await currentUser();
-
+  let userInfo;
+  if (user) {
+    const data = (await fetchUserById(user.id));
+    console.log(data,"hyug")
+    // console.log(user)
+    userInfo = data;
+  }
+  console.log(userInfo," userInfo")
   const { title, author, createdAt, content, comments, preset, guild } = post;
 
   return (
-    <div
-      style={{ background: "black", color: "whitesmoke" }}
-      className="w-full h-full px-2 flex flex-col items-center justify-between gap-3 sm:block "
-    >
-      <div className="w-full flex flex-col gap-5 flex-1 p-4 rounded-sm">
-        <div className="header text-white flex justify-start items-center gap-3 ">
-          {/* @ts-ignore */}
-          <Link href={`/profile/${author?.id}`} className="flex h-7 w-7">
-            <Avatar className="h-9 w-9">
-              {/* @ts-ignore */}
+    <div className="w-full">
 
-              <AvatarImage src={author?.image} alt={`@${author?.username}`} />
-              {/* @ts-ignore */}
+      {/*  @ts-ignore */}
+      <MorphCard post={post} isDetail={true} />
 
-              <AvatarFallback>{author?.username}</AvatarFallback>
-            </Avatar>
-          </Link>
-          <div className="flex flex-col">
-            <div className="flex gap-2 justify-between items-center">
-              {/* @ts-ignore */}
-
-              <p className="text-base-6 font-medium">{author?.name}</p>
-              <p
-                className="text-subtle-semibold text-muted-foreground order-last"
-                style={{ fontSize: "8px" }}
-              >
-                {formatDistanceToNow(createdAt)} ago
-              </p>
-            </div>
-            <p
-              className="text-sm font-medium transition ease-in-out duration-150"
-              style={{ fontSize: "8px" }}
-            >
-              {/* @ts-ignore */}
-              @{author?.username}
-            </p>
-          </div>
-        </div>
-        <h1 className="text-xl font-semibold py-2 leading-6">{title}</h1>
-        <div className=" hidden  h-[12rem] max-h-[30rem] lg:mb-[2rem] lg:block">
-          <EditorOutput content={content} isDetail={true} />
-        </div>
-        <ScrollArea className=" block  h-[12rem] max-h-[25rem] lg:hidden">
-          <EditorOutput content={content} isDetail={true} />
-        </ScrollArea>
-      </div>
       <div className="w-full mt-[1rem]">
-        <Separator className="text-white w-full my-2 h-1" />
-        <ScrollArea className="h-72 w-full rounded-md">
-          {user?.id ? (
+        <div className="h-48 w-full rounded-md">
+          {console.log(userInfo)}
+          {userInfo ? (
             <>
-              <CreateComment postId={id} />
-              <Separator className="text-white w-full my-2 h-1" />
+              <CreateComment
+                userId={userInfo.id}
+                postId={id}
+                currentUserImg={userInfo.image || ""}
+              />
             </>
           ) : (
-            <>Login to reply to this post</>
+            <div className="text-white">Login to reply to this post {JSON.stringify(userInfo)}</div>
           )}
-          {comments?.length ? <></> : <div className="">No comments</div>}
-        </ScrollArea>
+          {comments?.length ? (
+            <div className="text-white">
+              {comments.map((childItem: any) => (
+                <CommentCard
+                  key={childItem.id}
+                  id={childItem.id}
+                  postId={childItem.postId}
+                  content={childItem.content}
+                  authorId={childItem.authorId}
+                  // community={childItem.community}
+                  createdAt={childItem.createdAt}
+                  // comments={childItem.children}
+                  isReply={childItem.isReply}
+                  votes={undefined}               />
+              ))}
+            </div>
+          ) : (
+            <div className="">No postComments</div>
+          )}
+        </div>
       </div>
     </div>
   );

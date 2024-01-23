@@ -19,7 +19,6 @@ interface EditorOutputProps {
 }
 
 function CustomLinkRenderer({ data }: any) {
-  console.log("first", data);
   return (
     <Link
       href={data.link}
@@ -36,9 +35,10 @@ function CustomLinkRenderer({ data }: any) {
           {data.meta.description}
         </p>
       </p>
+      {/*  eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={data.meta.image.url}
-        alt="image of link"
+        alt="link"
         className="w-6 rounded-md cursor-pointer flex-grow-1 "
       />
     </Link>
@@ -58,28 +58,31 @@ const EditorOutput: FC<EditorOutputProps> = ({
   isLoaded,
 }) => {
   // console.log(content)
-  const renderers = {
-    image: CustomImageRenderer,
+  const renderers: any = {
     code: CustomCodeRenderer,
   };
-  if (!isDetail) {
-    //  ignore this
-    //  @ts-ignore
+  // if (!isDetail) {
     renderers["linktool"] = CustomLinkRenderer;
-  }
+    renderers["image"] = CustomImageRenderer;
+    //  ignore this
+  // }
+
 
   return (
     <Suspense
-    fallback={
-     <div className="flex justify-center items-center w-full"> <Loader className="h-5 w-5 animate-spin text-gray-100" /></div>
-    }
-  >
-   <Output
-      style={style}
-      className={`text-sm `}
-      renderers={renderers}
-      data={content}
-    />
+      fallback={
+        <div className="flex justify-center items-center w-full">
+          {" "}
+          <Loader className="h-5 w-5 animate-spin text-gray-100" />
+        </div>
+      }
+    >
+      <Output
+        style={style}
+        className={`text-sm `}
+        renderers={renderers}
+        data={content}
+      />
     </Suspense>
   );
 };

@@ -50,7 +50,7 @@ const PostCardNew = ({ post, height }: { post: any; height?: any }) => {
 
   return (
     <div
-      className="min-h-[12rem]  min-w-full max-h-[25rem] rounded-xl px-4 pt-4 pb-1 flex flex-col justify-start bg-card  shadow-sm mt-3 "
+      className="min-h-[12rem]  w-full  min-w-[50vh] max-h-[25rem] rounded-xl px-4 pt-4 pb-1 flex flex-col justify-start bg-card  shadow-sm mt-3 "
       style={{
         fontSize: "11px",
         background: preset?.backgroundColor || "#7a7db8",
