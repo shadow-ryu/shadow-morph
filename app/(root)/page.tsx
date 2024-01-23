@@ -75,6 +75,7 @@ const Page = async () => {
       return post;
     })
   );
+  
 
   return (
     <main className=" w-full bg-dark-3">
