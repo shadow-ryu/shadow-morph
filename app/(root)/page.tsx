@@ -16,7 +16,6 @@ import { useState } from "react";
 import { db } from "@/lib/db";
 import MorphCard from "@/components/post/MorphCard";
 
-
 const Page = async () => {
   const posts = await db.query.posts
     .findMany({
@@ -36,13 +35,13 @@ const Page = async () => {
           return post;
         }
 
-        let comments:any = post?.comments.slice(0, 2);
-        comments.map(async (comment:any) => {
+        let comments: any = post?.comments.slice(0, 2);
+        comments.map(async (comment: any) => {
           const details = await db
             .select()
             .from(users)
             .where(eq(users.id, comment.authorId));
-          comment["author"] = details[0]
+          comment["author"] = details[0];
           return comment;
         });
         post["comments"] = comments;
@@ -58,8 +57,11 @@ const Page = async () => {
     id: any;
     key: string;
   }) => {
-     // @ts-ignore
-    let [result] = await db.select().from(presets).where(sql`${presets[key]} = ${id}  `);
+    let [result] = await db
+    .select()
+    .from(presets)
+    // @ts-ignore
+      .where(sql`${presets[key]} = ${id}  `);
     return result;
   };
 
@@ -75,7 +77,6 @@ const Page = async () => {
       return post;
     })
   );
-
 
   return (
     <main className=" w-full bg-dark-3">
@@ -101,23 +102,13 @@ const Page = async () => {
             value="trending"
             className="border-none p-0 outline-none"
           >
-            {/* <ScrollArea className="h-[42rem] flex flex-col col-span-2 mx-2 ">
-              {finalData?.map((post, index) => {
-                // 
-                return <PostCardNew key={post.id + index} post={post} />;
-              })}
-            </ScrollArea> */}
+            <PostFeed initialPosts={finalData} />
           </TabsContent>
           <TabsContent
             value="following"
             className="border-none p-0 outline-none"
           >
-            <div className="h-[42rem] flex  text-white flex-col col-span-2 mx-2 ">
-              {finalData?.map((post, index) => {
-                //@ts-ignore
-                return (<MorphCard key={post.id} post={post} />);
-              })}
-            </div>
+            <PostFeed initialPosts={finalData} />
           </TabsContent>
         </Tabs>
       </div>

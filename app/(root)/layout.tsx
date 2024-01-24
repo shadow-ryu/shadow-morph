@@ -46,6 +46,10 @@ export default function RootLayout({
     <ClerkProvider>
       <Providers>
         <html lang="en">
+          <head>
+          <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16"/>
+          <link rel="icon" href="https://utfs.io/f/c7842498-d783-429a-8ae9-cd3eeff5a7ec-t1saia.ico" sizes="any" />
+          </head>
           <body
             className={`${inter.className} bg-dark-3 w-full h-screen`}
             suppressHydrationWarning={true}
@@ -77,7 +81,7 @@ export default function RootLayout({
                 <UserNav />
               </div>
             </div>
-            <div className="flex   h-full min-h-fit ">
+            <div className="flex   h-[92%] min-h-fit ">
               <div className={"col-span-1   w-28rem min-w-[20rem] max-w-[25rem] hidden lg:block border-x border-white"}>
                 <Nav
                   // isCollapsed={isCollapsed}
