@@ -147,7 +147,7 @@ export default function RootLayout({
             </nav> */}
               </div>
               {children}
-              <RightSidebar />
+              {/* <RightSidebar /> */}
             </div>
 
             <Toaster />
