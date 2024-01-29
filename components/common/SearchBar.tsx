@@ -13,7 +13,7 @@ const SearchBar = () => {
         variant={"unknown"}
         aria-label="Toggle bold"
         size={"icon"}
-        className="h-7 w-7  text-white "
+        className="h-7 w-7  justify-center items-center flex  "
         onClick={() => setActive(!active)}
       >
         {icon}
@@ -27,13 +27,22 @@ const SearchBar = () => {
           <Input
             type="search"
             placeholder="Search..."
-          className= {`block bg-crimson animate-slide-left_1s_ease-in-out text-white text-xl  ml-1 rounded-sm cursor-pointer ${active? 'opacity-100':'opacity-0 '}`}
-           
+            className={`block bg-crimson animate-slide-left_1s_ease-in-out text-black text-xl  ml-1 rounded-sm cursor-pointer ${
+              active ? "opacity-100" : "opacity-0 "
+            }`}
           />
-          {resetButton(<X className="h-4 w-4" />)}
+          {resetButton(
+            <X
+              className={`h-4 w-4 text-white  ${active ? "opacity-100" : "opacity-0 "}`}
+            />
+          )}
         </div>
       ) : (
-        resetButton(<Search className="h-4 w-4 " />)
+        resetButton(
+          <Search
+            className={`h-4 w-4 text-white  ${active ? "opacity-0" : "opacity-100 "}`}
+          />
+        )
       )}
     </div>
   );

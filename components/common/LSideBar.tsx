@@ -6,72 +6,160 @@ import { SignOutButton, SignedIn, useAuth } from "@clerk/nextjs";
 import { sidebarLinks } from "@/lib/constants";
 import { UserNav } from "./UserNav";
 import LogoSvg from "./LogoSvg";
+import { Nav } from "@/components/common/Navbar";
+import {
+  ActivitySquare,
+  AlertCircle,
+  Archive,
+  ArchiveX,
+  Bookmark,
+  File,
+  ImagePlus,
+  Inbox,
+  LucideIcon,
+  MessagesSquare,
+  PenBox,
+  Search,
+  Send,
+  ShoppingCart,
+  Swords,
+  Trash2,
+  Users2,
+} from "lucide-react";
 import { Separator } from "../ui/separator";
+const profileNavLinks= [
+  {
+    title: "Home",
+    icon: Inbox,
+    route: "/",
+    variant: "default",
+  },
+  {
+    title: "Drafts",
+    route: "/drafts",
+    icon: File,
+    variant: "ghost",
+  },
+  {
+    title: "Activity",
+    route: "/activity",
+    icon: ActivitySquare,
+    variant: "ghost",
+  },
+
+  {
+    title: "Bookmark",
+    route: "/bookmark",
+    icon: Bookmark,
+    variant: "ghost",
+  },
+  {
+    title: "Create Post",
+    route: "",
+    icon: ImagePlus,
+    variant: "ghost",
+  },
+
+  {
+    title: "Guilds",
+    route: "/guilds",
+    icon: Swords,
+    variant: "ghost",
+  },
+  {
+    title: "Updates",
+    route: "/app_updates",
+    icon: AlertCircle,
+    variant: "ghost",
+  },
+];
+interface link {
+  title: string;
+  label?: string;
+  icon: LucideIcon;
+  route: string;
+  variant: "default" | "ghost";
+}
 const LeftSidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const defaultLinks :Array<link>= [
+    {
+      title: "Home",
+      icon: Inbox,
+      route: "/",
+      variant: "default",
+    },
+    {
+      title: "Drafts",
+      route: "/drafts",
+      icon: File,
+      variant: "ghost",
+    },
+    {
+      title: "Activity",
+      route: "/activity",
+      icon: ActivitySquare,
+      variant: "ghost",
+    },
 
+    {
+      title: "Bookmark",
+      route: "/bookmark",
+      icon: Bookmark,
+      variant: "ghost",
+    },
+    {
+      title: "Create Post",
+      route: "",
+      icon: ImagePlus,
+      variant: "ghost",
+    },
+
+    {
+      title: "Guilds",
+      route: "/guilds",
+      icon: Swords,
+      variant: "ghost",
+    },
+    {
+      title: "Updates",
+      route: "/app_updates",
+      icon: AlertCircle,
+      variant: "ghost",
+    },
+  ];
   const { userId } = useAuth();
   const dynamicRoutePattern = /^\/guilds\/\d+\/editor$/;
+  const profileProtectedPattern = /\/profile\/(?!visit\b)/;
   // console.log(pathname);
-  if (["/customize"].includes(pathname) || dynamicRoutePattern.test(pathname)) {
+  if (["/customize",].includes(pathname) || dynamicRoutePattern.test(pathname)|| profileProtectedPattern.test(pathname)) {
     return null;
   }
   return (
-    <section className="custom-scrollbar leftsidebar w-max  min-w-[20rem]">
-      <div className="flex flex-col justify-center items-center">
-        <Link
-          href="/"
-          className="flex gap-2 min-h-4 w-full text-center p-2   justify-center  items-center order-first"
-        >
-          {/* <Icons.logo className='h-8 w-8 sm:h-6 sm:w-6' /> */}
-          <LogoSvg height={40} width={40} />
-          <h4 className="hidden text-white  text-md text-heading3-semibold md:block">
-            ShadMorph
-          </h4>
-        </Link>
+    <div
+      className={
+        "col-span-1   w-28rem min-w-[20rem] max-w-[25rem] hidden lg:block border-x border-white"
+      }
+    >
+      <Nav
+      links={defaultLinks}
+      // isCollapsed={isCollapsed}
+      />
 
-          <Separator className="mx-1" />
+      {/* <nav className="grid gap-1 my-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+  <SignedIn>
 
-      </div>
-      <div className="flex w-full order-2 flex-1 flex-col gap-6 px-6 pb-5 pt-6 ">
-        {sidebarLinks.map((link) => {
-          const isActive =
-            (pathname.includes(link.route) && link.route.length > 1) ||
-            pathname === link.route;
-
-          if (link.route === "/profile") link.route = `${link.route}/${userId}`;
-
-          return (
-            <Link
-              href={link.route}
-              key={link.label}
-              className={`leftsidebar_link ${isActive && "bg-primary-500 "}`}
-            >
-              <Image
-                src={link.imgURL}
-                alt={link.label}
-                width={22}
-                height={22}
-              />
-
-              <p className="text-light-1 max-lg:hidden">{link.label}</p>
-            </Link>
-          );
-        })}
-      </div>
-
-      <div className=" order-last   border-t-slate-300">
-        {userId ? (
-          <UserNav />
-        ) : (
-          <Link className="text-white" href={"post/create"}>
-            {" "}
-            sign-In
-          </Link>
-        )}
-      </div>
-    </section>
+    <div className="flex justify-start w-full  text-white gap-3 items-center">
+      <UserButton />
+      {!isCollapsed ? <div className="">user</div> : ""}
+    </div>
+  </SignedIn>
+  <SignedOut>
+    <SignInButton />
+  </SignedOut>
+</nav> */}
+    </div>
   );
 };
 

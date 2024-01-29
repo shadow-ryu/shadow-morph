@@ -10,26 +10,9 @@ import Logo from "@/public/pac-logo.png";
 import SearchBar from "@/components/common/SearchBar";
 import { UserNav } from "@/components/common/UserNav";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Nav } from "@/components/common/Navbar";
-import {
-  ActivitySquare,
-  AlertCircle,
-  Archive,
-  ArchiveX,
-  Bookmark,
-  File,
-  ImagePlus,
-  Inbox,
-  MessagesSquare,
-  PenBox,
-  Search,
-  Send,
-  ShoppingCart,
-  Swords,
-  Trash2,
-  Users2,
-} from "lucide-react";
+
 import RightSidebar from "@/components/common/RSidebar";
+import LeftSidebar from "@/components/common/LSideBar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -57,7 +40,7 @@ export default function RootLayout({
             <div className="h-[3.5rem] w-full flex item-center self-center   justify-between rounded-none  border-b  ">
               <Link
                 href="/"
-                className="flex gap-1  w-[11.5rem] h-[3rem] text-center px-2 mt-1   justify-start  items-center order-first bg-slate-400 rounded-xl "
+                className="flex gap-1 w-fit  md:w-[11.5rem] h-[3rem] text-center px-2 mt-1   justify-start  items-center order-first md:bg-slate-400 rounded-xl "
               >
                 <Image src={Logo} alt="logo" height={50} width={35} />
 
@@ -68,7 +51,7 @@ export default function RootLayout({
                   ShadMorph
                 </h4>
                 <span
-                  className="bg-red-100 text-red-800 text-sm  me-2 px-1 py-0.4 rounded dark:bg-red-900 dark:text-red-300"
+                  className="bg-red-100 hidden md:block text-red-800 text-sm  me-2 px-1 py-0.4 rounded dark:bg-red-900 dark:text-red-300"
                   style={{ fontSize: "8px" }}
                 >
                   V 0.1
@@ -82,70 +65,7 @@ export default function RootLayout({
               </div>
             </div>
             <div className="flex   h-[92%] min-h-fit ">
-              <div className={"col-span-1   w-28rem min-w-[20rem] max-w-[25rem] hidden lg:block border-x border-white"}>
-                <Nav
-                  // isCollapsed={isCollapsed}
-                  links={[
-                    {
-                      title: "Home",
-                      icon: Inbox,
-                      route: "/",
-                      variant: "default",
-                    },
-                    {
-                      title: "Drafts",
-                      route: "/drafts",
-                      icon: File,
-                      variant: "ghost",
-                    },
-                    {
-                      title: "Activity",
-                      route: "/activity",
-                      icon: ActivitySquare,
-                      variant: "ghost",
-                    },
-
-                    {
-                      title: "Bookmark",
-                      route: "/bookmark",
-                      icon: Bookmark,
-                      variant: "ghost",
-                    },
-                    {
-                      title: "Create Post",
-                      route: "",
-                      icon: ImagePlus,
-                      variant: "ghost",
-                    },
-
-                    {
-                      title: "Guilds",
-                      route: "/guilds",
-                      icon: Swords,
-                      variant: "ghost",
-                    },
-                    {
-                      title: "Updates",
-                      route: "/app_updates",
-                      icon: AlertCircle,
-                      variant: "ghost",
-                    },
-                  ]}
-                />
-
-                {/* <nav className="grid gap-1 my-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-              <SignedIn>
-
-                <div className="flex justify-start w-full  text-white gap-3 items-center">
-                  <UserButton />
-                  {!isCollapsed ? <div className="">user</div> : ""}
-                </div>
-              </SignedIn>
-              <SignedOut>
-                <SignInButton />
-              </SignedOut>
-            </nav> */}
-              </div>
+              <LeftSidebar/>
               {children}
               {/* <RightSidebar /> */}
             </div>
